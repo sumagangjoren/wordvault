@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+'use client'
+import Layout from "./layouts/layout"
+import AuthLayout from "./layouts/authlayout"
+import { Route, createRoutesFromElements, createBrowserRouter, RouterProvider } from 'react-router'
+import Login from "./pages/login"
+import Home from "./pages/home"
+import About from "./pages/about"
+import Words from "./pages/words"
+import Word from "./pages/word"
+import SignUp from "./pages/signup"
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    const routes = createRoutesFromElements(
+        <>
+            <Route path="/" element={<Layout />}>
+                <Route path="" index element={<Home />} />
+                <Route path="about" element={<About />} />
+                <Route path="words" element={<Words />} />
+                
+            </Route>
+            <Route element={<AuthLayout />}>
+                <Route path="login" element={<Login />} />
+                <Route path="signup" element={<SignUp />} />
+            </Route>
+        </>
+    );
+
+    const router = createBrowserRouter(routes);
+
+
+    return (
+        <>
+            {/* <Routes>
+                <Route element={<Navbar />}>
+                    <Route path="/home" element={<Home />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/words" element={<Words />} />
+                </Route>
+                <Route path="/login" element={<Login />} />
+            </Routes> */}
+            <RouterProvider router={router} />
+        </>
+    )
 }
 
 export default App
