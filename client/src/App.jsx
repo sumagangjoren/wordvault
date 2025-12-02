@@ -8,6 +8,8 @@ import About from "./pages/about"
 import Words from "./pages/words"
 import Word from "./pages/word"
 import SignUp from "./pages/signup"
+import CreateVocabulary from "./pages/createVocabulary"
+import ShowVocabulary from "./pages/showVocabulary"
 
 function App() {
 
@@ -17,6 +19,8 @@ function App() {
                 <Route path="" index element={<Home />} />
                 <Route path="about" element={<About />} />
                 <Route path="words" element={<Words />} />
+                <Route path="create" element={<CreateVocabulary />} />
+                <Route path="show" element={<ShowVocabulary />} />
                 
             </Route>
             <Route element={<AuthLayout />}>
