@@ -5,11 +5,13 @@ import { Route, createRoutesFromElements, createBrowserRouter, RouterProvider } 
 import Login from "./pages/login"
 import Home from "./pages/home"
 import About from "./pages/about"
-import Words from "./pages/words"
-import Word from "./pages/word"
 import SignUp from "./pages/signup"
 import CreateVocabulary from "./pages/createVocabulary"
 import ShowVocabulary from "./pages/showVocabulary"
+import EditVocabulary from "./pages/editVocabulary"
+import Vocabularies from "./pages/vocabularies"
+import Quiz from "./pages/quiz"
+import Result from "./pages/result"
 
 function App() {
 
@@ -18,10 +20,12 @@ function App() {
             <Route path="/" element={<Layout />}>
                 <Route path="" index element={<Home />} />
                 <Route path="about" element={<About />} />
-                <Route path="words" element={<Words />} />
                 <Route path="create" element={<CreateVocabulary />} />
                 <Route path="show" element={<ShowVocabulary />} />
-                
+                <Route path="edit" element={<EditVocabulary />} />
+                <Route path="vocabularies" element={<Vocabularies />} />
+                <Route path="quiz" element={<Quiz />} />
+                <Route path="result" element={<Result />} />
             </Route>
             <Route element={<AuthLayout />}>
                 <Route path="login" element={<Login />} />

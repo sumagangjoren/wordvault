@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ShowVocabulary({
+function ShowVocabulary({
     title = "Example Vocabulary Title",
     description = "This is a sample description for the vocabulary item. Replace with real data.",
 }) {
@@ -105,3 +105,5 @@ const styles = {
         color: "#374151",
     },
 };
+
+export default ShowVocabulary;

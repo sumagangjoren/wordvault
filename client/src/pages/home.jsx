@@ -1,42 +1,46 @@
-import { useNavigate } from "react-router"
+import { useState } from 'react';
+
 
 function Home() {
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-    const navigate = useNavigate()
+    const words = [
+        { title: 'Serendipity', definition: 'The occurrence of events by chance in a happy or beneficial way', partOfSpeech: 'noun' },
+        { title: 'Ephemeral', definition: 'Lasting for a very short time', partOfSpeech: 'adjective' },
+        { title: 'Eloquent', definition: 'Fluent or persuasive in speaking or writing', partOfSpeech: 'adjective' },
+        { title: 'Procrastinate', definition: 'To delay or postpone something', partOfSpeech: 'verb' },
+    ];
 
-    const input = { padding: 10, fontSize: 16, borderRadius: 8, border: "1px solid #ddd", outline: "none" };
+    const handleNext = () => {
+        setCurrentIndex((prev) => (prev + 1) % words.length);
+    };
+
+    const handlePrev = () => {
+        setCurrentIndex((prev) => (prev - 1 + words.length) % words.length);
+    };
+
+    const current = words[currentIndex];
 
     return (
-        <>
-            <div className="m-4">
-                <input type="text" placeholder="search" style={input} className="w-full mb-8"/>
-                {[...Array(3)].map((_, i) => (
-                    <div key={i} className="relative my-4 bg-gray-200" onClick={() => navigate('show')}>
-
-                        <div className="text-h3">title</div>
-                        <div>word description</div>
-
-                        <div className="rounded-full absolute top-2 right-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round"
-                                    d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-                            </svg>
-                        </div>
-
-                        <div className="grid grid-cols-2 place-content-evenly gap-4">
-                            <div className="justify-self-start">Tue, 2 December 2025</div>
-                            <div className="justify-self-end">icons</div>
-                        </div>
-
-                    </div>
-                ))}
-                <div className="bottom-2 absolute w-full pr-4">
-                    <button className="  bg-green-200 w-full" onClick={() => navigate('create')}>Add</button>
+        <div className="flex flex-col h-screen bg-gray-50">
+            {/* Content Container */}
+            <div className="flex-1 flex items-center justify-center px-6">
+                <div className="text-center">
+                    <h1 className="text-5xl font-bold text-gray-900 mb-4">{current.title}</h1>
+                    <p className="text-lg text-blue-600 font-semibold mb-6">{current.partOfSpeech}</p>
+                    <p className="text-xl text-gray-700 leading-relaxed max-w-2xl">{current.definition}</p>
                 </div>
             </div>
-        </>
-    )
+
+            {/* Action Buttons */}
+            <div className="bg-white border-t border-gray-200 p-6 flex justify-center gap-4 mb-20">
+                <button onClick={handlePrev} className="px-6 py-3 bg-gray-300 hover:bg-gray-400 text-gray-900 font-semibold rounded-lg">Previous</button>
+                <button onClick={handleNext} className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg">Next</button>
+                <button className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg">Favorite</button>
+                <button className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg">Share</button>
+            </div>
+        </div>
+    );
 }
 
-export default Home
+export default Home;

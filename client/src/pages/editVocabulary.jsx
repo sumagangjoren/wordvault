@@ -1,5 +1,5 @@
 
-function CreateVocabulary() {
+function EditVocabulary() {
     
 
     const styles = {
@@ -23,8 +23,8 @@ function CreateVocabulary() {
                     ←
                 </button> */}
                 <div style={styles.titleBlock}>
-                    <h1 style={styles.title}>add new</h1>
-                    <div style={styles.subtitle}>add your own word.</div>
+                    <h1 style={styles.title}>Edit</h1>
+                    <div style={styles.subtitle}>edit your own word.</div>
                 </div>
             </header>
 
@@ -48,7 +48,7 @@ function CreateVocabulary() {
 
                 <div style={styles.saveWrap}>
                     <button type="submit" style={styles.saveBtn}>
-                        Save
+                        Update
                     </button>
                 </div>
             </form>
@@ -56,4 +56,4 @@ function CreateVocabulary() {
     );
 }
 
-export default CreateVocabulary;
+export default EditVocabulary;
