@@ -9,10 +9,11 @@ function VocabularyCard(props) {
     let [isOpen, setIsOpen] = useState(false)
 
     return (
-        <div key={props} className="relative my-4 bg-gray-200" onClick={() => navigate('/show')}>
+        <div key={props} className="relative my-4 bg-gray-200" onClick={() => navigate('/vocabularies/show')}>
 
-            <div className="text-h3">{props.title}</div>
-            <div>word {props.description}</div>
+            <div className="text-h3">{props.vocabulary.word}</div>
+            <div>{props.vocabulary.definition}</div>
+            <div>{props.vocabulary.type}</div>
 
             <div onClick={(e) => e.stopPropagation()}>
                 
@@ -27,7 +28,7 @@ function VocabularyCard(props) {
 
                     <MenuItems anchor="bottom">
                         <MenuItem>
-                            <Link to={'/edit'}>
+                            <Link to={'/vocabularies/edit'}>
                                 <button className="block w-full text-left data-focus:bg-blue-100">
                                     Edit
                                 </button>
@@ -46,7 +47,7 @@ function VocabularyCard(props) {
             </div>
 
             <div className="grid grid-cols-2 place-content-evenly gap-4">
-                <div className="justify-self-start">Tue, 2 December 2025</div>
+                <div className="justify-self-start">{props.vocabulary.created_at}</div>
                 <div className="justify-self-end">icons</div>
             </div>
 

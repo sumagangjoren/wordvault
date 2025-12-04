@@ -1,6 +1,30 @@
+import supabase from "../supabaseClient";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 
 function CreateVocabulary() {
-    
+
+    const navigate = useNavigate();
+    const [createVocabulary, setCreateVocabulary] = useState({ word: "", definition: "", type: "" });
+
+    const handleSave = async (e) => {
+        e.preventDefault();
+
+        const { data, error } = await supabase.from('vocabularies').insert([
+            {
+                word: createVocabulary.word,
+                definition: createVocabulary.definition,
+                type: createVocabulary.type
+            }
+        ])
+
+        if(error) {
+            console.error("Error inserting vocabulary:", error);
+        } else {
+            navigate('/vocabularies');
+        }
+
+    }
 
     const styles = {
         page: { minHeight: "100vh", display: "flex", flexDirection: "column", padding: 20, boxSizing: "border-box" },
@@ -33,21 +57,25 @@ function CreateVocabulary() {
                     style={styles.input}
                     placeholder="word"
                     autoFocus
+                    value={createVocabulary.word}
+                    onChange={(e) => setCreateVocabulary({ ...createVocabulary, word: e.target.value })}
                 />
 
                 <textarea
                     style={styles.textarea}
                     placeholder="definition"
+                    value={createVocabulary.definition}
+                    onChange={(e) => setCreateVocabulary({ ...createVocabulary, definition: e.target.value })}
                 />
 
                 <div className="grid grid-cols-3 gap-4">
-                    <div className="rounded-md bg-green-200 text-center">Verb</div>
-                    <div className="rounded-md bg-green-200 text-center">Noun</div>
-                    <div className="rounded-md bg-green-200 text-center">Adjective</div>
+                    <div className="rounded-md bg-green-200 text-center" onClick={() => setCreateVocabulary({...createVocabulary, type: "verb"})}>Verb</div>
+                    <div className="rounded-md bg-green-200 text-center" onClick={() => setCreateVocabulary({...createVocabulary, type: "noun"})}>Noun</div>
+                    <div className="rounded-md bg-green-200 text-center" onClick={() => setCreateVocabulary({...createVocabulary, type: "adjective"})}> Adjective</div>
                 </div>
 
                 <div style={styles.saveWrap}>
-                    <button type="submit" style={styles.saveBtn}>
+                    <button type="submit" style={styles.saveBtn} onClick={handleSave}>
                         Save
                     </button>
                 </div>

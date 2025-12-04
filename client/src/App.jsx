@@ -20,9 +20,9 @@ function App() {
             <Route path="/" element={<Layout />}>
                 <Route path="" index element={<Home />} />
                 <Route path="about" element={<About />} />
-                <Route path="create" element={<CreateVocabulary />} />
-                <Route path="show" element={<ShowVocabulary />} />
-                <Route path="edit" element={<EditVocabulary />} />
+                <Route path="vocabularies/create" element={<CreateVocabulary />} />
+                <Route path="vocabularies/show" element={<ShowVocabulary />} />
+                <Route path="vocabularies/edit" element={<EditVocabulary />} />
                 <Route path="vocabularies" element={<Vocabularies />} />
                 <Route path="quiz" element={<Quiz />} />
                 <Route path="result" element={<Result />} />
