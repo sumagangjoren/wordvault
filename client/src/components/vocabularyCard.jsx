@@ -9,7 +9,7 @@ function VocabularyCard(props) {
     let [isOpen, setIsOpen] = useState(false)
 
     return (
-        <div key={props} className="relative my-4 bg-gray-200" onClick={() => navigate('show')}>
+        <div key={props} className="relative my-4 bg-gray-200" onClick={() => navigate('/show')}>
 
             <div className="text-h3">{props.title}</div>
             <div>word {props.description}</div>

@@ -13,7 +13,7 @@ function ShowVocabulary({
                 </div>
             </main>
 
-            <footer style={styles.footer}>
+            <footer style={styles.footer} className="pb-10">
                 <button aria-label="icon-1" style={styles.iconButton}>
                     {/* Star icon */}
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>

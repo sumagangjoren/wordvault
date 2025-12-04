@@ -8,14 +8,14 @@ import { NavLink, Link } from 'react-router'
 function Navbar() {
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-    const navigation = [
-        { name: 'Home', href: '/' },
-        { name: 'Words', href: '/words' },
-        { name: 'About', href: '/about' },
-    ]
+    // const navigation = [
+    //     { name: 'Home', href: '/' },
+    //     { name: 'Words', href: '/words' },
+    //     { name: 'About', href: '/about' },
+    // ]
 
     return (
-        <header className="inset-x-0 top-0 z-50">
+        <header className="inset-x-0 top-0  fixed">
             <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
                 <div className="flex lg:flex-1">
                     <NavLink to="/" className="-m-1.5 p-1.5">
@@ -37,7 +37,7 @@ function Navbar() {
                         <Bars3Icon aria-hidden="true" className="size-6" />
                     </button>
                 </div>
-                <div className="hidden lg:flex lg:gap-x-12">
+                {/* <div className="hidden lg:flex lg:gap-x-12">
                     {navigation.map((item) => (
                         <NavLink key={item.name} to={item.href} className={({ isActive }) =>
                             `text-sm/6 font-semibold ${isActive ? "text-red-500" : "text-black"}`
@@ -45,7 +45,7 @@ function Navbar() {
                             {item.name}
                         </NavLink>
                     ))}
-                </div>
+                </div> */}
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
                     <Link to="/login" className="text-sm/6 font-semibold">
                         Log in <span aria-hidden="true">&rarr;</span>
@@ -74,7 +74,7 @@ function Navbar() {
                             <XMarkIcon aria-hidden="true" className="size-6" />
                         </button>
                     </div>
-                    <div className="mt-6 flow-root">
+                    {/* <div className="mt-6 flow-root">
                         <div className="-my-6 divide-y">
                             <div className="space-y-2 py-6">
                                 {navigation.map((item) => (
@@ -96,7 +96,7 @@ function Navbar() {
                                 </a>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </DialogPanel>
             </Dialog>
         </header>

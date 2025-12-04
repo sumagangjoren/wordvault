@@ -5,8 +5,10 @@ import BottomNav from '../components/bottomNavbar'
 function Layout() {
   return (
     <div>
-        <Navbar className="mb-8"/>
-        <Outlet/>
+        <Navbar className=""/>
+        <main className="pt-20">
+        <Outlet />
+      </main>
         <BottomNav />
     </div>
   )
