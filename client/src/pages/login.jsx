@@ -1,212 +1,96 @@
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import supabase from "../supabaseClient";
 
 function Login() {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
-
-    const styles = {
-        page: {
-            minHeight: "100vh",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background: "linear-gradient(135deg,#667eea 0%,#764ba2 100%)",
-            fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-            padding: "24px",
-        },
-        card: {
-            width: "100%",
-            maxWidth: 420,
-            background: "white",
-            borderRadius: 12,
-            boxShadow: "0 10px 30px rgba(2,6,23,0.2)",
-            padding: "28px",
-            boxSizing: "border-box",
-        },
-        header: {
-            marginBottom: 18,
-            textAlign: "center",
-        },
-        title: {
-            margin: 0,
-            fontSize: 22,
-            color: "#222",
-        },
-        subtitle: {
-            margin: "6px 0 0",
-            fontSize: 13,
-            color: "#666",
-        },
-        form: {
-            display: "grid",
-            gap: 12,
-            marginTop: 18,
-        },
-        label: {
-            fontSize: 13,
-            color: "#333",
-            marginBottom: 6,
-            display: "block",
-        },
-        input: {
-            width: "100%",
-            padding: "12px 14px",
-            fontSize: 14,
-            borderRadius: 8,
-            border: "1px solid #e6e9ef",
-            outline: "none",
-            boxSizing: "border-box",
-        },
-        passwordRow: {
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-        },
-        revealBtn: {
-            fontSize: 12,
-            padding: "8px 10px",
-            border: "none",
-            background: "transparent",
-            color: "#6b6b6b",
-            cursor: "pointer",
-        },
-        lowRow: {
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: 4,
-        },
-        checkboxLabel: {
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            fontSize: 13,
-            color: "#555",
-        },
-        link: {
-            fontSize: 13,
-            color: "#5b6df6",
-            textDecoration: "none",
-            cursor: "pointer",
-        },
-        primaryBtn: {
-            width: "100%",
-            padding: "12px 14px",
-            background: "linear-gradient(90deg,#5b6df6,#667eea)",
-            color: "white",
-            border: "none",
-            borderRadius: 10,
-            fontSize: 15,
-            cursor: "pointer",
-            boxShadow: "0 6px 18px rgba(101,108,234,0.28)",
-        },
-        altRow: {
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            marginTop: 12,
-            justifyContent: "center",
-            color: "#9aa0b4",
-            fontSize: 13,
-        },
-        ghostBtn: {
-            padding: "8px 12px",
-            borderRadius: 8,
-            border: "1px solid #e6e9ef",
-            background: "white",
-            cursor: "pointer",
-            fontSize: 13,
-        },
-        signupRow: {
-            marginTop: 14,
-            textAlign: "center",
-            fontSize: 14,
-            color: "#444",
-        },
-        signupBtn: {
-            marginLeft: 8,
-            border: "none",
-            background: "transparent",
-            color: "#5b6df6",
-            fontWeight: 600,
-            cursor: "pointer",
-        },
-    };
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = (e) => {
-        e.preventDefault(); // UI only - don't send anything
+        e.preventDefault();
+    };
+
+
+    const handleLogin = async (event) => {
+        event.preventDefault();
+        setLoading(true);
+        const { error } = await supabase.auth.signInWithOtp({
+            email,
+            options: {
+                emailRedirectTo: window.location.origin,
+            }
+        });
+        if (error) {
+            alert(error.error_description || error.message);
+        } else {
+            alert("Check your email for the login link!");
+        }
+        setLoading(false);
     };
 
     return (
-        <div style={styles.page}>
-            <div style={styles.card}>
-                <div style={styles.header}>
-                    <h2 style={styles.title}>Welcome back</h2>
-                    <p style={styles.subtitle}>Sign in to access your WordVault</p>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-700 px-6">
+            <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
+                <div className="mb-6 text-center">
+                    <h2 className="text-2xl font-bold text-gray-900">Welcome back</h2>
+                    <p className="text-sm text-gray-600 mt-1">Sign in to access your WordVault</p>
                 </div>
 
-                <form style={styles.form} onSubmit={handleSubmit} aria-label="Login form">
+                <form onSubmit={handleLogin} className="space-y-4" aria-label="Login form">
                     <div>
-                        <label htmlFor="username" style={styles.label}>
-                            Username or Email
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                            Email
                         </label>
-                        <input id="username" name="username" style={styles.input} placeholder="you@example.com" />
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="you@example.com"
+                            value={email}
+                            onChange={(e) => setEmail((prev) => e.target.value)}
+                        />
                     </div>
-
+                        {loading ? 'Loading...' : 'ok'}
                     <div>
-                        <label htmlFor="password" style={styles.label}>
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                             Password
                         </label>
-                        <div style={styles.passwordRow}>
+                        <div className="relative">
                             <input
                                 id="password"
                                 name="password"
                                 type={showPassword ? "text" : "password"}
-                                style={{ ...styles.input, margin: 0 }}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="Enter your password"
                             />
                             <button
                                 type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-3 top-3 text-sm text-gray-600"
                                 aria-label="toggle password visibility"
-                                onClick={() => setShowPassword((s) => !s)}
-                                style={styles.revealBtn}
                             >
                                 {showPassword ? "Hide" : "Show"}
                             </button>
                         </div>
                     </div>
 
-                    <div style={styles.lowRow}>
-                        <label style={styles.checkboxLabel}>
-                            <input type="checkbox" aria-label="remember me" />
-                            Remember me
-                        </label>
-                        <a style={styles.link} href="#" onClick={(e) => e.preventDefault()}>
-                            Forgot?
-                        </a>
-                    </div>
-
-                    <button type="submit" style={styles.primaryBtn}>
+                    <button
+                        type="submit"
+                        className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-lg hover:shadow-lg transition"
+                    >
                         Sign in
                     </button>
 
-                    <div style={styles.altRow}>
-                        <span>or continue with</span>
-                        <button type="button" style={styles.ghostBtn} aria-label="Sign in with Google">
-                            Google
-                        </button>
-                        <button type="button" style={styles.ghostBtn} aria-label="Sign in with GitHub">
-                            GitHub
-                        </button>
-                    </div>
-
-                    <div style={styles.signupRow}>
+                    <div className="text-center text-sm text-gray-600 mt-4">
                         New here?
                         <button
                             type="button"
                             onClick={() => navigate("/signup")}
-                            style={styles.signupBtn}
+                            className="ml-1 text-blue-600 font-semibold hover:underline"
                         >
                             Create an account
                         </button>

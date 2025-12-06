@@ -29,7 +29,7 @@ function Vocabularies() {
             <div className="m-4">
                 <input type="text" placeholder="search" style={input} className="w-full mb-8"/>
                 {vocabularies.map((vocabulary, i) => (
-                    <VocabularyCard vocabulary={vocabulary}/>
+                    <VocabularyCard vocabulary={vocabulary} key={i}/>
                 ))}
                 <div className="bottom-20 right-2 absolute pr-4">
                     <button className="bg-green-200 p-4 rounded-xl" onClick={() => navigate('/vocabularies/create')}>

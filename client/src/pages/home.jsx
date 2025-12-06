@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
 
-function Home() {
+function Home({session}) {
+    console.log(session)
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const words = [
