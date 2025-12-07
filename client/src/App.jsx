@@ -12,20 +12,23 @@ import EditVocabulary from "./pages/editVocabulary"
 import Vocabularies from "./pages/vocabularies"
 import Quiz from "./pages/quiz"
 import Result from "./pages/result"
+import PrivateRoute from "./components/privateRoute"
 
 function App() {
 
     const routes = createRoutesFromElements(
         <>
-            <Route path="/" element={<Layout />}>
-                <Route path="" index element={<Home />} />
-                <Route path="about" element={<About />} />
-                <Route path="vocabularies/create" element={<CreateVocabulary />} />
-                <Route path="vocabularies/show" element={<ShowVocabulary />} />
-                <Route path="vocabularies/edit" element={<EditVocabulary />} />
-                <Route path="vocabularies" element={<Vocabularies />} />
-                <Route path="quiz" element={<Quiz />} />
-                <Route path="result" element={<Result />} />
+            <Route element={<PrivateRoute />}>
+                <Route path="/" element={<Layout />}>
+                    <Route path="" index element={<Home />} />
+                    <Route path="about" element={<About />} />
+                    <Route path="vocabularies/create" element={<CreateVocabulary />} />
+                    <Route path="vocabularies/show" element={<ShowVocabulary />} />
+                    <Route path="vocabularies/edit" element={<EditVocabulary />} />
+                    <Route path="vocabularies" element={<Vocabularies />} />
+                    <Route path="quiz" element={<Quiz />} />
+                    <Route path="result" element={<Result />} />
+                </Route> 
             </Route>
             <Route element={<AuthLayout />}>
                 <Route path="login" element={<Login />} />

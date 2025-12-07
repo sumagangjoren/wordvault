@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import { useAuthContext } from '../context/authContext';
 
-
-function Home({session}) {
-    console.log(session)
+function Home() {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const { session } = useAuthContext();
 
+    console.log(session)
     const words = [
         { title: 'Serendipity', definition: 'The occurrence of events by chance in a happy or beneficial way', partOfSpeech: 'noun' },
         { title: 'Ephemeral', definition: 'Lasting for a very short time', partOfSpeech: 'adjective' },
