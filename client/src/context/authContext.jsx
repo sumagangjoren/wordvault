@@ -67,10 +67,27 @@ export const AuthContextProvider = ({ children }) => {
     const signOut = async () => {
         await supabase.auth.signOut();
         setSession(null);
-    }; 
+    };
+
+
+    const signIn = async ({email, password}) => {
+        setLoading(true);
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+            options: {
+                emailRedirectTo: window.location.origin,
+            }
+        });
+        if (error) {
+            // alert(error.error_description || error.message);
+            return { success: false, error: error.message };
+        }
+        setLoading(false);
+    };
 
     return (
-        <AuthContext.Provider value={{session, signOut}}>
+        <AuthContext.Provider value={{session, signOut, signIn, loading}}>
             {children}
         </AuthContext.Provider>
     )
