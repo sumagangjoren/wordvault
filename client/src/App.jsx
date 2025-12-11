@@ -13,6 +13,7 @@ import Vocabularies from "./pages/vocabularies"
 import Quiz from "./pages/quiz"
 import Result from "./pages/result"
 import PrivateRoute from "./components/privateRoute"
+import PublicRoute from "./components/publicRoute"
 
 function App() {
 
@@ -30,9 +31,11 @@ function App() {
                     <Route path="result" element={<Result />} />
                 </Route> 
             </Route>
-            <Route element={<AuthLayout />}>
-                <Route path="login" element={<Login />} />
-                <Route path="signup" element={<SignUp />} />
+            <Route element={<PublicRoute />}>
+                <Route element={<AuthLayout />}>
+                    <Route path="login" element={<Login />} />
+                    <Route path="signup" element={<SignUp />} />
+                </Route>
             </Route>
         </>
     );
@@ -42,14 +45,6 @@ function App() {
 
     return (
         <>
-            {/* <Routes>
-                <Route element={<Navbar />}>
-                    <Route path="/home" element={<Home />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/words" element={<Words />} />
-                </Route>
-                <Route path="/login" element={<Login />} />
-            </Routes> */}
             <RouterProvider router={router} />
         </>
     )

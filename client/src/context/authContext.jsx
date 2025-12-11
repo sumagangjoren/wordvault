@@ -56,13 +56,24 @@ export const AuthContextProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+    async function loadSession() {
+      const { data } = await supabase.auth.getSession();
+      setSession(data.session);
+      setLoading(false);
+    }
 
-        setLoading(true);
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session);
-        });
+    loadSession();
 
-    }, []);
+    // Listen to login/logout
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_, currentSession) => {
+        setSession(currentSession);
+        setLoading(false);
+      }
+    );
+
+    return () => listener.subscription.unsubscribe();
+  }, []);
 
     const signOut = async () => {
         await supabase.auth.signOut();
@@ -71,6 +82,7 @@ export const AuthContextProvider = ({ children }) => {
 
 
     const signIn = async ({email, password}) => {
+        console.log(email, password)
         setLoading(true);
         const { error } = await supabase.auth.signInWithPassword({
             email,
@@ -79,15 +91,38 @@ export const AuthContextProvider = ({ children }) => {
                 emailRedirectTo: window.location.origin,
             }
         });
+        setLoading(false);
         if (error) {
             // alert(error.error_description || error.message);
+            console.error(error)
             return { success: false, error: error.message };
         }
-        setLoading(false);
+        else {
+            return { success: true };
+        }
     };
 
+    const signUp = async ({name, email, password}) => {
+        setLoading(true);
+        const { error, data } = await supabase.auth.signUp({
+            email, 
+            password,
+            options: {
+                emailRedirectTo: window.location.origin,
+            },
+        })
+        setLoading(false);
+        if(error) {
+            console.error(error)
+            return { success: false, error: error.message };
+        }
+        else {
+            return { success: true };
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{session, signOut, signIn, loading}}>
+        <AuthContext.Provider value={{session, signOut, signIn, loading, signUp}}>
             {children}
         </AuthContext.Provider>
     )

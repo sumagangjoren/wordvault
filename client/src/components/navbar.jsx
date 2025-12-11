@@ -2,20 +2,22 @@
 import { useState } from 'react'
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { NavLink, Link } from 'react-router'
+import { NavLink, Link, useNavigate } from 'react-router'
 import { useAuthContext } from '../context/authContext'
 
 function Navbar() {
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const navigate = useNavigate()
     const { signOut } = useAuthContext()
     const navigation = [
         { name: 'Home', href: '/' },
-        { name: 'Words', href: '/words' },
-        { name: 'About', href: '/about' },
     ]
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        console.log('hi')
+        await signOut()
+        navigate("/login")
         console.log('hi')
     }
 

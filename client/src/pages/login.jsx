@@ -1,34 +1,30 @@
 import { useNavigate } from "react-router";
 import { useState } from "react";
 import supabase from "../supabaseClient";
+import { useAuthContext } from "../context/authContext.jsx";
 
 function Login() {
+
+    const { signIn } = useAuthContext()
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(false);
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-    };
-
 
     const handleLogin = async (event) => {
         event.preventDefault();
-        setLoading(true);
-        const { error } = await supabase.auth.signInWithOtp({
-            email,
-            options: {
-                emailRedirectTo: window.location.origin,
+        try {
+            const result = await signIn({ email, password });
+            console.log(result)
+            if(result.success) {
+                navigate("/");
+            } else {
+                console.log("Something went wrong...")
             }
-        });
-        if (error) {
-            alert(error.error_description || error.message);
-        } else {
-            alert("Check your email for the login link!");
         }
-        setLoading(false);
+        catch (error) {
+            console.error("Login failed:", error);
+        }
     };
 
     return (
@@ -54,7 +50,6 @@ function Login() {
                             onChange={(e) => setEmail((prev) => e.target.value)}
                         />
                     </div>
-                        {loading ? 'Loading...' : 'ok'}
                     <div>
                         <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                             Password
@@ -66,6 +61,7 @@ function Login() {
                                 type={showPassword ? "text" : "password"}
                                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="Enter your password"
+                                onChange={(e) => setPassword((prev) => e.target.value)}
                             />
                             <button
                                 type="button"

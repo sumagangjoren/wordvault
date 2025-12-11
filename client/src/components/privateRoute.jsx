@@ -2,11 +2,11 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useAuthContext } from '../context/authContext';
 
 export default function PrivateRoute() {
-    const { session } = useAuthContext();
+  const { session, loading } = useAuthContext();
 
-    // if (!session) {
-    //     return <div>Loading...</div>;
-    // }
+  // 1. Still checking Supabase?
+  if (loading) return <div>Loading...</div>;
 
-    return session ? <Outlet /> : <Navigate to="/login" />;
+  // 2. After loading → check logged in or not
+  return session ? <Outlet /> : <Navigate to="/login" />;
 }
