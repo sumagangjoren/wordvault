@@ -56,24 +56,34 @@ export const AuthContextProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-    async function loadSession() {
-      const { data } = await supabase.auth.getSession();
-      setSession(data.session);
-      setLoading(false);
-    }
 
-    loadSession();
+        setLoading(true);
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            setSession(session);
+        });
 
-    // Listen to login/logout
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_, currentSession) => {
-        setSession(currentSession);
-        setLoading(false);
-      }
-    );
+    }, []);
 
-    return () => listener.subscription.unsubscribe();
-  }, []);
+    useEffect(() => {
+
+        async function loadSession() {
+            const { data } = await supabase.auth.getSession();
+            setSession(data.session);
+            setLoading(false);
+        }
+
+        loadSession();
+
+        // Listen to login/logout
+        // const { data: listener } = supabase.auth.onAuthStateChange(
+        //     (_, currentSession) => {
+        //         setSession(currentSession);
+        //         setLoading(false);
+        //     }
+        // );
+
+        return () => listener.subscription.unsubscribe();
+    }, []);
 
     const signOut = async () => {
         await supabase.auth.signOut();
