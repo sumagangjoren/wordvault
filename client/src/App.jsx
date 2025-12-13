@@ -14,6 +14,7 @@ import Quiz from "./pages/quiz"
 import Result from "./pages/result"
 import PrivateRoute from "./components/privateRoute"
 import PublicRoute from "./components/publicRoute"
+import EmailConfirmation from "./pages/emailConfirmation"
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
                 <Route element={<AuthLayout />}>
                     <Route path="login" element={<Login />} />
                     <Route path="signup" element={<SignUp />} />
+                    <Route path="email-confirmation" element={<EmailConfirmation />} />
                 </Route>
             </Route>
         </>

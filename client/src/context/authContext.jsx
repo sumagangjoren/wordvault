@@ -55,14 +55,14 @@ export const AuthContextProvider = ({ children }) => {
     const [session, setSession] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        setLoading(true);
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session);
-        });
+    //     setLoading(true);
+    //     supabase.auth.getSession().then(({ data: { session } }) => {
+    //         setSession(session);
+    //     });
 
-    }, []);
+    // }, []);
 
     useEffect(() => {
 
@@ -75,12 +75,12 @@ export const AuthContextProvider = ({ children }) => {
         loadSession();
 
         // Listen to login/logout
-        // const { data: listener } = supabase.auth.onAuthStateChange(
-        //     (_, currentSession) => {
-        //         setSession(currentSession);
-        //         setLoading(false);
-        //     }
-        // );
+        const { data: listener } = supabase.auth.onAuthStateChange(
+            (_, currentSession) => {
+                setSession(currentSession);
+                setLoading(false);
+            }
+        );
 
         return () => listener.subscription.unsubscribe();
     }, []);
@@ -93,6 +93,7 @@ export const AuthContextProvider = ({ children }) => {
 
     const signIn = async ({email, password}) => {
         console.log(email, password)
+        console.log(email, password)
         setLoading(true);
         const { error } = await supabase.auth.signInWithPassword({
             email,
@@ -102,17 +103,21 @@ export const AuthContextProvider = ({ children }) => {
             }
         });
         setLoading(false);
+        console.log("im here")
         if (error) {
             // alert(error.error_description || error.message);
+            console.log("im here 2")
             console.error(error)
             return { success: false, error: error.message };
         }
         else {
+            console.log("hi")
             return { success: true };
         }
     };
 
     const signUp = async ({name, email, password}) => {
+        console.log(email, password)
         setLoading(true);
         const { error, data } = await supabase.auth.signUp({
             email, 
@@ -127,6 +132,7 @@ export const AuthContextProvider = ({ children }) => {
             return { success: false, error: error.message };
         }
         else {
+            console.log("hello")
             return { success: true };
         }
     }

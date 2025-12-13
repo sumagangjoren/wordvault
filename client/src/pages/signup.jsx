@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 
 export default function SignUp() {
 
-	const { signUp } = useAuthContext();
+	const { signUp, loading } = useAuthContext();
 	const navigate = useNavigate();
 	const [formData, setFormData] = useState({
 		name: '',
@@ -21,12 +21,13 @@ export default function SignUp() {
 		}));
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const result = signUp({email: formData.email, password: formData.password});
+			const result = await signUp({email: formData.email, password: formData.password});
+			console.log(result)
 			if(result.success) {
-				useNavigate("/");
+				navigate("/");
 			}
 			else {
 				console.error(result.error)
@@ -44,7 +45,7 @@ export default function SignUp() {
 				<h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">Sign Up</h1>
 				
 				<form onSubmit={handleSubmit} className="space-y-4">
-					<div>
+					{/* <div>
 						<label className="block text-sm font-medium text-gray-700 mb-1">
 							Name
 						</label>
@@ -55,9 +56,8 @@ export default function SignUp() {
 							onChange={handleChange}
 							className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 							placeholder="Enter your name"
-							// required
 						/>
-					</div>
+					</div> */}
 
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1">
@@ -89,7 +89,7 @@ export default function SignUp() {
 						/>
 					</div>
 
-					<div>
+					{/* <div>
 						<label className="block text-sm font-medium text-gray-700 mb-1">
 							Confirm Password
 						</label>
@@ -102,13 +102,25 @@ export default function SignUp() {
 							placeholder="Confirm your password"
 							required
 						/>
-					</div>
+					</div> */}
 
 					<button
 						type="submit"
-						className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg transition duration-200"
+						disabled={loading}
+						className={`
+							w-full font-semibold py-2 rounded-lg transition duration-200
+							flex items-center justify-center gap-2
+							${loading
+								? "bg-blue-400 cursor-not-allowed"
+								: "bg-blue-500 hover:bg-blue-600"
+							}
+							text-white
+						`}
 					>
-						Sign Up
+						{loading && (
+							<span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+						)}
+						{loading ? "Signing up..." : "Sign Up"}
 					</button>
 				</form>
 			</div>

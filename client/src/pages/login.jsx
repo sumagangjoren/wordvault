@@ -5,7 +5,7 @@ import { useAuthContext } from "../context/authContext.jsx";
 
 function Login() {
 
-    const { signIn } = useAuthContext()
+    const { signIn, loading } = useAuthContext()
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
@@ -18,6 +18,7 @@ function Login() {
             console.log(result)
             if(result.success) {
                 navigate("/");
+                console.log("gogo")
             } else {
                 console.log("Something went wrong...")
             }
@@ -76,6 +77,7 @@ function Login() {
 
                     <button
                         type="submit"
+                        disabled={loading}
                         className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-lg hover:shadow-lg transition"
                     >
                         Sign in
