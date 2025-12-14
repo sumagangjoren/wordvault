@@ -6,6 +6,7 @@ export default function SignUp() {
 
 	const { signUp, loading } = useAuthContext();
 	const navigate = useNavigate();
+	const [showPassword, setShowPassword] = useState(false);
 	const [formData, setFormData] = useState({
 		name: '',
 		email: '',
@@ -42,8 +43,12 @@ export default function SignUp() {
 	return (
 		<div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
 			<div className="bg-white rounded-lg shadow-md p-8 w-full max-w-md">
-				<h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">Sign Up</h1>
-				
+				{/* <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">Sign Up</h1>
+				<p className="text-sm text-gray-600 mt-1">Sign in to access your WordVault</p> */}
+				 <div className="mb-6 text-center">
+                    <h2 className="text-2xl font-bold text-gray-900">Sign Up</h2>
+                    <p className="text-sm text-gray-600 mt-1">Sign up to WordVault</p>
+                </div>
 				<form onSubmit={handleSubmit} className="space-y-4">
 					{/* <div>
 						<label className="block text-sm font-medium text-gray-700 mb-1">
@@ -78,7 +83,7 @@ export default function SignUp() {
 						<label className="block text-sm font-medium text-gray-700 mb-1">
 							Password
 						</label>
-						<input
+						{/* <input
 							type="password"
 							name="password"
 							value={formData.password}
@@ -86,7 +91,26 @@ export default function SignUp() {
 							className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 							placeholder="Enter your password"
 							required
-						/>
+						/> */}
+						<div className="relative">
+                            <input
+                                id="password"
+                                name="password"
+								value={formData.password}
+                                type={showPassword ? "text" : "password"}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Enter your password"
+                                onChange={handleChange}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-3 top-3 text-sm text-gray-600"
+                                aria-label="toggle password visibility"
+                            >
+                                {showPassword ? "Hide" : "Show"}
+                            </button>
+                        </div>
 					</div>
 
 					{/* <div>
@@ -122,6 +146,17 @@ export default function SignUp() {
 						)}
 						{loading ? "Signing up..." : "Sign Up"}
 					</button>
+
+					<div className="text-center text-sm text-gray-600 mt-4">
+                        Already have an account?
+                        <button
+                            type="button"
+                            onClick={() => navigate("/login")}
+                            className="ml-1 text-blue-600 font-semibold hover:underline"
+                        >
+                            Sign in
+                        </button>
+                    </div>
 				</form>
 			</div>
 		</div>

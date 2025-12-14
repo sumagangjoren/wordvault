@@ -5,7 +5,7 @@ import { useAuthContext } from "../context/authContext.jsx";
 
 function Login() {
 
-    const { signIn, loading } = useAuthContext()
+    const { signIn, loading, errorMessage } = useAuthContext()
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
@@ -29,30 +29,35 @@ function Login() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-700 px-6">
-            <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+			<div className="bg-white rounded-lg shadow-md p-8 w-full max-w-md">
                 <div className="mb-6 text-center">
                     <h2 className="text-2xl font-bold text-gray-900">Welcome back</h2>
                     <p className="text-sm text-gray-600 mt-1">Sign in to access your WordVault</p>
                 </div>
 
                 <form onSubmit={handleLogin} className="space-y-4" aria-label="Login form">
+
+                    {
+                        errorMessage && <div className="p-4 border border-red-600">{errorMessage}</div>
+                    }
+
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                             Email
                         </label>
                         <input
                             id="email"
                             name="email"
                             type="email"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="you@example.com"
                             value={email}
                             onChange={(e) => setEmail((prev) => e.target.value)}
                         />
                     </div>
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                             Password
                         </label>
                         <div className="relative">
@@ -60,7 +65,7 @@ function Login() {
                                 id="password"
                                 name="password"
                                 type={showPassword ? "text" : "password"}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="Enter your password"
                                 onChange={(e) => setPassword((prev) => e.target.value)}
                             />
@@ -75,13 +80,32 @@ function Login() {
                         </div>
                     </div>
 
-                    <button
+                    {/* <button
                         type="submit"
                         disabled={loading}
                         className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-lg hover:shadow-lg transition"
                     >
                         Sign in
-                    </button>
+                    </button> */}
+
+                    <button
+						type="submit"
+						disabled={loading}
+						className={`
+							w-full font-semibold py-2 rounded-lg transition duration-200
+							flex items-center justify-center gap-2
+							${loading
+								? "bg-blue-400 cursor-not-allowed"
+								: "bg-blue-500 hover:bg-blue-600"
+							}
+							text-white
+						`}
+					>
+						{loading && (
+							<span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+						)}
+						{loading ? "Signing in..." : "Sign In"}
+					</button>
 
                     <div className="text-center text-sm text-gray-600 mt-4">
                         New here?

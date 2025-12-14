@@ -54,6 +54,7 @@ export const AuthContextProvider = ({ children }) => {
 
     const [session, setSession] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     // useEffect(() => {
 
@@ -108,7 +109,8 @@ export const AuthContextProvider = ({ children }) => {
             // alert(error.error_description || error.message);
             console.log("im here 2")
             console.error(error)
-            return { success: false, error: error.message };
+            setErrorMessage(error.message)
+            return { success: false, error: error };
         }
         else {
             console.log("hi")
@@ -129,16 +131,19 @@ export const AuthContextProvider = ({ children }) => {
         setLoading(false);
         if(error) {
             console.error(error)
-            return { success: false, error: error.message };
+            console.log(data)
+            setErrorMessage(error.message)
+            return { success: false, error };
         }
         else {
             console.log("hello")
+            console.log(data)
             return { success: true };
         }
     }
 
     return (
-        <AuthContext.Provider value={{session, signOut, signIn, loading, signUp}}>
+        <AuthContext.Provider value={{session, signOut, signIn, loading, signUp, errorMessage}}>
             {children}
         </AuthContext.Provider>
     )
