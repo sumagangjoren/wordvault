@@ -3,11 +3,12 @@ import VocabularyCard from "../components/vocabularyCard";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import supabase from "../supabaseClient";
+import { useVocabularyContext } from "../context/vocabularyContext";
 
 function Vocabularies() {
 
-
-    const [vocabularies, setVocabularies] = useState([]);
+    const { vocabularies, setVocabularies } = useVocabularyContext();
+    // const [vocabularies, setVocabularies] = useState([]);
     const getVocabularies = async () => {
         const { data, error } = await supabase
             .from('vocabularies')

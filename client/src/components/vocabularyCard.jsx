@@ -2,11 +2,22 @@ import { Menu, MenuButton, MenuItem, MenuItems, Description, Dialog, DialogPanel
 import { useNavigate } from 'react-router';
 import { useState } from 'react'
 import { Link } from 'react-router';
+import supabase from '../supabaseClient';
 
 function VocabularyCard(props) {
 
     const navigate = useNavigate();
     let [isOpen, setIsOpen] = useState(false)
+
+    const handleDelete = async () => {
+        console.log('helo')
+        const response = await supabase
+        .from('vocabularies')
+        .delete()
+        .eq('id', props.vocabulary.id)
+        console.log('helo')
+        console.log(response);
+    }
 
     return (
         <div key={props} className="relative my-4 bg-gray-200" onClick={() => navigate('/vocabularies/show')}>
@@ -59,7 +70,7 @@ function VocabularyCard(props) {
                         <p>Are you sure you want to deactivate your account? All of your data will be permanently removed.</p>
                         <div className="flex gap-4">
                             <button onClick={() => setIsOpen(false)}>Cancel</button>
-                            <button onClick={() => setIsOpen(false)}>Deactivate</button>
+                            <button onClick={handleDelete}>Delete</button>
                         </div>
                     </DialogPanel>
                 </div>
