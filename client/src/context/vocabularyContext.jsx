@@ -17,9 +17,13 @@ export const VocabularyContextProvider = ({ children }) => {
         }
     };
 
+    const deleteVocabulary = (id) => {
+        setVocabularies(prev => prev.filter(v => v.id !== id));
+    };
+
 
     return (
-        <VocabularyContext.Provider value={{ vocabularies, fetchVocabularies, setVocabularies }}>
+        <VocabularyContext.Provider value={{ vocabularies, fetchVocabularies, setVocabularies, deleteVocabulary }}>
             {children}
         </VocabularyContext.Provider>
     )

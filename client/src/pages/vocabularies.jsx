@@ -7,7 +7,7 @@ import { useVocabularyContext } from "../context/vocabularyContext";
 
 function Vocabularies() {
 
-    const { vocabularies, setVocabularies } = useVocabularyContext();
+    const { vocabularies, setVocabularies, deleteVocabulary } = useVocabularyContext();
     // const [vocabularies, setVocabularies] = useState([]);
     const getVocabularies = async () => {
         const { data, error } = await supabase
@@ -30,7 +30,7 @@ function Vocabularies() {
             <div className="m-4">
                 <input type="text" placeholder="search" style={input} className="w-full mb-8"/>
                 {vocabularies.map((vocabulary, i) => (
-                    <VocabularyCard vocabulary={vocabulary} key={i}/>
+                    <VocabularyCard vocabulary={vocabulary} key={i} onDelete={deleteVocabulary} />
                 ))}
                 <div className="bottom-20 right-2 absolute pr-4">
                     <button className="bg-green-200 p-4 rounded-xl" onClick={() => navigate('/vocabularies/create')}>

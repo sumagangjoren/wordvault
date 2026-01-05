@@ -1,6 +1,24 @@
+import supabase from "../supabaseClient";
+import { useEffect, useState } from "react";
 
-function EditVocabulary() {
+function EditVocabulary({ id }) {
     
+    const [editVocabulary, setEditVocabulary] = useState({ word: "", definition: "", type: "" });
+
+    useEffect(() => {
+        async function fetchVocabulary() {
+            const { data, error } = await supabase
+            .from('vocabularies')
+            .select()
+            .eq('id', 2)
+            .single();
+
+            console.log(data);
+            console.log(error);
+        }
+
+        fetchVocabulary();
+    }, []);
 
     const styles = {
         page: { minHeight: "100vh", display: "flex", flexDirection: "column", padding: 20, boxSizing: "border-box" },
@@ -33,11 +51,13 @@ function EditVocabulary() {
                     style={styles.input}
                     placeholder="word"
                     autoFocus
+                    // value={editVocabulary.word}
                 />
 
                 <textarea
                     style={styles.textarea}
                     placeholder="definition"
+                    // value={editVocabulary.definition}
                 />
 
                 <div className="grid grid-cols-3 gap-4">

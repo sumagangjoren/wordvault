@@ -7,16 +7,15 @@ import supabase from '../supabaseClient';
 function VocabularyCard(props) {
 
     const navigate = useNavigate();
-    let [isOpen, setIsOpen] = useState(false)
-
+    let [isOpen, setIsOpen] = useState(false);
     const handleDelete = async () => {
         console.log('helo')
         const response = await supabase
         .from('vocabularies')
         .delete()
         .eq('id', props.vocabulary.id)
-        console.log('helo')
-        console.log(response);
+        props.onDelete(props.vocabulary.id);
+        
     }
 
     return (
