@@ -15,6 +15,7 @@ import Result from "./pages/result"
 import PrivateRoute from "./components/privateRoute"
 import PublicRoute from "./components/publicRoute"
 import EmailConfirmation from "./pages/emailConfirmation"
+import QuizSetup from "./pages/quizSetup"
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
                     <Route path="vocabularies/edit" element={<EditVocabulary />} />
                     <Route path="vocabularies" element={<Vocabularies />} />
                     <Route path="quiz" element={<Quiz />} />
+                    <Route path="quiz-setup" element={<QuizSetup />} />
                     <Route path="result" element={<Result />} />
                 </Route> 
             </Route>

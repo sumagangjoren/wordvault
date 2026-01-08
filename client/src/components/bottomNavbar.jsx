@@ -8,9 +8,9 @@ import {
 export default function BottomNav() {
     const items = [
         { path: '/', label: 'Home', icon: '🏠' },
-        { path: '/list', label: 'Vocab', icon: '📚' },
-        { path: '/create', label: 'Add', icon: '➕' },
-        { path: '/quiz', label: 'Quiz', icon: '🧠' },
+        { path: '/quiz-setup', label: 'Quiz', icon: '🧠' },
+        { path: '/vocabularies', label: 'Vocabs', icon: '📚' },
+        // { path: '/create', label: 'Add', icon: '➕' },
     ];
 
     return (
