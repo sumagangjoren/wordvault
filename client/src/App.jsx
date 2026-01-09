@@ -16,8 +16,13 @@ import PrivateRoute from "./components/privateRoute"
 import PublicRoute from "./components/publicRoute"
 import EmailConfirmation from "./pages/emailConfirmation"
 import QuizSetup from "./pages/quizSetup"
+import QuizGame from "./pages/quizGame"
+import FormVocabulary from "./pages/formVocabulary"
+import { useVocabularyContext } from "./context/vocabularyContext"
 
 function App() {
+
+    const { createVocabulary, updateVocabulary } = useVocabularyContext();
 
     const routes = createRoutesFromElements(
         <>
@@ -25,12 +30,13 @@ function App() {
                 <Route path="/" element={<Layout />}>
                     <Route path="" index element={<Home />} />
                     <Route path="about" element={<About />} />
-                    <Route path="vocabularies/create" element={<CreateVocabulary />} />
+                    <Route path="vocabularies/create" element={<FormVocabulary handleSubmit={createVocabulary} />} />
                     <Route path="vocabularies/show" element={<ShowVocabulary />} />
-                    <Route path="vocabularies/edit" element={<EditVocabulary />} />
+                    <Route path="vocabularies/edit" element={<FormVocabulary handleSubmit={updateVocabulary} />} />
                     <Route path="vocabularies" element={<Vocabularies />} />
                     <Route path="quiz" element={<Quiz />} />
-                    <Route path="quiz-setup" element={<QuizSetup />} />
+                    <Route path="quiz/play" element={<QuizGame />} />
+                    <Route path="quiz/setup" element={<QuizSetup />} />
                     <Route path="result" element={<Result />} />
                 </Route> 
             </Route>

@@ -3,7 +3,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function QuizSetup({ vocabCount }) {
-  const [type, setType] = useState()
+
+  const quizType = {
+    WORD_TO_DEFINITION: 'WORD_TO_DEFINITION',
+    DEFINITION_TO_WORD: 'DEFINITION_TO_WORD',
+  };
+  const [type, setType] = useState(quizType.WORD_TO_DEFINITION);
   const navigate = useNavigate();
 
   const handleStart = () => {
@@ -20,29 +25,29 @@ export default function QuizSetup({ vocabCount }) {
 
       <div className="w-full max-w-md space-y-4 mb-10">
         <button
-          onClick={() => setType(QuizType.WORD_TO_DEFINITION)}
+          onClick={() => setType(quizType.WORD_TO_DEFINITION)}
           className={`w-full p-6 rounded-3xl border-2 transition-all text-left flex items-center justify-between ${
-            type === QuizType.WORD_TO_DEFINITION ? 'border-indigo-600 bg-indigo-50' : 'border-slate-100 bg-white'
+            type === quizType.WORD_TO_DEFINITION ? 'border-indigo-600 bg-indigo-50' : 'border-slate-100 bg-white'
           }`}
         >
           <div>
             <h3 className="font-bold text-slate-900">Word → Meaning</h3>
             <p className="text-sm text-slate-500">See a word, pick the right definition.</p>
           </div>
-          {type === QuizType.WORD_TO_DEFINITION && <span className="text-indigo-600 font-bold">✓</span>}
+          {type === quizType.WORD_TO_DEFINITION && <span className="text-indigo-600 font-bold">✓</span>}
         </button>
 
         <button
-          onClick={() => setType(QuizType.DEFINITION_TO_WORD)}
+          onClick={() => setType(quizType.DEFINITION_TO_WORD)}
           className={`w-full p-6 rounded-3xl border-2 transition-all text-left flex items-center justify-between ${
-            type === QuizType.DEFINITION_TO_WORD ? 'border-indigo-600 bg-indigo-50' : 'border-slate-100 bg-white'
+            type === quizType.DEFINITION_TO_WORD ? 'border-indigo-600 bg-indigo-50' : 'border-slate-100 bg-white'
           }`}
         >
           <div>
             <h3 className="font-bold text-slate-900">Meaning → Word</h3>
             <p className="text-sm text-slate-500">Read the meaning, pick the word.</p>
           </div>
-          {type === QuizType.DEFINITION_TO_WORD && <span className="text-indigo-600 font-bold">✓</span>}
+          {type === quizType.DEFINITION_TO_WORD && <span className="text-indigo-600 font-bold">✓</span>}
         </button>
       </div>
 

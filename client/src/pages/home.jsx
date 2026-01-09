@@ -2,32 +2,29 @@ import { useState, useEffect } from 'react';
 import { useAuthContext } from '../context/authContext';
 import { useVocabularyContext } from '../context/vocabularyContext';
 import { useNavigate } from 'react-router';
-import supabase from '../supabaseClient';
+// import supabase from '../supabaseClient';
 
 function Home() {
-    const { session } = useAuthContext();
-    const { vocabularies, setVocabularies } = useVocabularyContext();
+    const { vocabularies } = useVocabularyContext();
     const navigate = useNavigate();
-    console.log(session)
 
-    const getVocabularies = async () => {
-        const { data, error } = await supabase
-            .from('vocabularies')
-            .select('*');
-        setVocabularies(data);
-        // console.log(data)
-    }
+    // const getVocabularies = async () => {
+    //     const { data, error } = await supabase
+    //         .from('vocabularies')
+    //         .select('*');
+    //     setVocabularies(data);
+    // }
 
-     useEffect(() => {
-        getVocabularies();
-    }, []);
+    //  useEffect(() => {
+    //     getVocabularies();
+    // }, []);
     // const vocabularies = [
     //     { id: 1, word: 'Serendipity', definition: 'The occurrence of events by chance in a happy or beneficial way', isFavorite: true },
     //     { id: 2, word: 'Ephemeral', definition: 'Lasting for a very short time', isFavorite: false },
     //     { id: 3, word: 'Eloquent', definition: 'Fluent or persuasive in speaking or writing', isFavorite: true },
     //     { id: 4, word: 'Procrastinate', definition: 'To delay or postpone something', isFavorite: false },
     // ];
-    console.log(vocabularies);
+
     if (vocabularies.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center h-full pt-20 px-6 text-center">
