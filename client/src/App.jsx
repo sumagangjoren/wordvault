@@ -30,9 +30,9 @@ function App() {
                 <Route path="/" element={<Layout />}>
                     <Route path="" index element={<Home />} />
                     <Route path="about" element={<About />} />
+                    <Route path="vocabularies/:vocabulary_id" element={<ShowVocabulary />} />
                     <Route path="vocabularies/create" element={<FormVocabulary handleSubmit={createVocabulary} />} />
-                    <Route path="vocabularies/show" element={<ShowVocabulary />} />
-                    <Route path="vocabularies/edit" element={<FormVocabulary handleSubmit={updateVocabulary} />} />
+                    <Route path="vocabularies/:vocabulary_id/edit" element={<FormVocabulary handleSubmit={updateVocabulary} />} />
                     <Route path="vocabularies" element={<Vocabularies />} />
                     <Route path="quiz" element={<Quiz />} />
                     <Route path="quiz/play" element={<QuizGame />} />

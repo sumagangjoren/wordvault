@@ -12,7 +12,7 @@ export const VocabularyContextProvider = ({ children }) => {
     const [vocabularies, setVocabularies] = useState([]);
     const [errorMessage, setErrorMessage] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [vocabulary, setVocabulary] = useState({ word: "", definition: "", partOfSpeech: "" });
+    const [vocabulary, setVocabulary] = useState({ word: "", definition: "", partOfSpeech: "", example: "", partOfSpeech: "" });
 
     const fetchVocabularies = async () => {
          if (!session) {
@@ -32,7 +32,7 @@ export const VocabularyContextProvider = ({ children }) => {
 
     useEffect(() => {
         fetchVocabularies();
-    }, [session]);
+    }, [session?.user?.id]);
 
     const deleteVocabulary = (id) => {
         setVocabularies(prev => prev.filter(v => v.id !== id));
@@ -68,7 +68,9 @@ export const VocabularyContextProvider = ({ children }) => {
                     {
                         word: vocabulary.word.trim(),
                         definition: vocabulary.definition.trim(),
-                        partOfSpeech: vocabulary.partOfSpeech
+                        partOfSpeech: vocabulary.partOfSpeech,
+                        example: vocabulary.example.trim(),
+                        user_id: session.user.id
                     }
                 ]);
 
@@ -78,7 +80,10 @@ export const VocabularyContextProvider = ({ children }) => {
                 return;
             }
 
-            navigate("/vocabularies");
+             // ✅ optimistic update
+            setVocabularies(prev => [vocabulary, ...prev]);
+            // ✅ reset form safely
+            setVocabulary({ word: "", definition: "", partOfSpeech: "", example: "", partOfSpeech: "" });
         } catch (err) {
             console.error("Unexpected error:", err);
             setErrorMessage("Something went wrong. Please try again.");

@@ -1,13 +1,25 @@
-import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useVocabularyContext } from "../context/vocabularyContext";
 
 export default function FormVocabulary({ handleSubmit }) {
 
-    const { vocabularies, vocabulary, setVocabulary, loading, errorMessage } = useVocabularyContext();
-    const { id } = useParams();
-    const editing = vocabularies?.find(v => v.id === id);
+    const { vocabularies, vocabulary, setVocabulary, loading, errorMessage, } = useVocabularyContext();
+    const { vocabulary_id } = useParams();
+    const editing = vocabularies?.find(v => v.id == vocabulary_id);
     const navigate = useNavigate();
+
+    const handleFormSubmit = async (e) => {
+        // e.preventDefault();
+        // setErrorMessage(null);
+        try {
+            handleSubmit(e);
+            // navigate to home or details page
+            navigate('/vocabularies'); // or navigate(`/vocabularies/${result.data.id}`)
+        } catch (err) {
+            //   setErrorMessage(err.message || 'Failed to create');
+            console.error('Error submitting form:', err);
+        }
+    };
 
     return (
         <div className="p-6 max-w-2xl mx-auto">
@@ -20,13 +32,13 @@ export default function FormVocabulary({ handleSubmit }) {
                     ❌
                 </button>
             </header>
-                {errorMessage && (
-                    <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg border border-red-200">
-                        {errorMessage}
-                    </div>
-                )}
-            <form 
-                onSubmit={handleSubmit} 
+            {errorMessage && (
+                <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg border border-red-200">
+                    {errorMessage}
+                </div>
+            )}
+            <form
+                onSubmit={handleFormSubmit}
                 className="space-y-6">
                 <div className="space-y-2">
                     <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">The Word</label>
@@ -37,8 +49,8 @@ export default function FormVocabulary({ handleSubmit }) {
                             className="flex-grow px-5 py-4 rounded-2xl bg-white border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-xl font-bold"
                             placeholder="e.g. Epiphany"
                             value={vocabulary.word}
-                            onChange={(e) => setVocabulary({...vocabulary, word: e.target.value})}
-                            // onBlur={handleEnrich}
+                            onChange={(e) => setVocabulary({ ...vocabulary, word: e.target.value })}
+                        // onBlur={handleEnrich}
                         />
                         {/* <button
                             type="button"
@@ -60,20 +72,20 @@ export default function FormVocabulary({ handleSubmit }) {
                         className="w-full px-5 py-4 rounded-2xl bg-white border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
                         placeholder="What does it mean?"
                         value={vocabulary.definition}
-                        onChange={(e) => setVocabulary({...vocabulary, definition: e.target.value})}
+                        onChange={(e) => setVocabulary({ ...vocabulary, definition: e.target.value })}
                     />
                 </div>
 
-                {/* <div className="space-y-2">
+                <div className="space-y-2">
                     <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">Example Sentence</label>
                     <textarea
                         rows={3}
                         className="w-full px-5 py-4 rounded-2xl bg-white border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all italic"
                         placeholder="Use it in a sentence..."
-                        value={example}
-                        onChange={(e) => setExample(e.target.value)}
+                        value={vocabulary.example}
+                        onChange={(e) => setVocabulary({ ...vocabulary, example: e.target.value })}
                     />
-                </div> */}
+                </div>
 
                 <div className="pt-6">
                     <button
@@ -83,6 +95,7 @@ export default function FormVocabulary({ handleSubmit }) {
                         {editing ? 'Save Changes' : 'Add to Collection'}
                     </button>
                 </div>
+            
             </form>
         </div>
     );

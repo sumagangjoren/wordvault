@@ -1,109 +1,103 @@
-import React from "react";
 
-function ShowVocabulary({
-    title = "Example Vocabulary Title",
-    description = "This is a sample description for the vocabulary item. Replace with real data.",
-}) {
+import { useNavigate, useParams } from "react-router-dom";
+import { useVocabularyContext } from "../context/vocabularyContext";
+
+export default function ShowVocabulary() {
+
+    const { vocabularies } = useVocabularyContext();
+    const { vocabulary_id } = useParams();
+    const navigate = useNavigate();
+    console.log(vocabularies)
+    const vocab = vocabularies.find(v => v.id == vocabulary_id);
+    console.log(vocabulary_id)
+    console.log(vocab)
+    if (!vocab) {
+        return <div className="p-10 text-center">Word not found.</div>;
+    }
+
+
     return (
-        <div style={styles.page}>
-            <main style={styles.centerArea}>
-                <div style={styles.card}>
-                    <h1 style={styles.title}>{title}</h1>
-                    <p style={styles.description}>{description}</p>
+        <div className="min-h-screen bg-white">
+            {/* Header */}
+            <div className="relative h-64 bg-indigo-600 flex items-center justify-center p-6 text-white overflow-hidden">
+                <div className="absolute top-4 left-4">
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-all"
+                    >
+                        <span className="text-xl">←</span>
+                    </button>
                 </div>
-            </main>
+                <div className="absolute top-4 right-4 flex space-x-2">
+                    <button
+                        onClick={() => onToggleFavorite(vocab.id)}
+                        className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-all"
+                    >
+                        <span className="text-xl">{vocab.isFavorite ? '❤️' : '🤍'}</span>
+                    </button>
+                    <button
+                        onClick={() => navigate(`/vocabularies/${vocab.id}/edit`)}
+                        className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-all"
+                    >
+                        <span className="text-xl">✏️</span>
+                    </button>
+                </div>
 
-            <footer style={styles.footer} className="pb-10">
-                <button aria-label="icon-1" style={styles.iconButton}>
-                    {/* Star icon */}
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-                        <path d="M12 17.3L5.6 20l1.1-6.4L2.5 9.6l6.5-.9L12 3l3 5.7 6.5.9-4.2 3.9L18.4 20 12 17.3z" fill="currentColor"/>
-                    </svg>
-                </button>
+                {/* Backdrop Visual */}
+                <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+                    <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-indigo-400/20 rounded-full blur-3xl"></div>
+                </div>
 
-                <button aria-label="icon-2" style={styles.iconButton}>
-                    {/* Pencil / Edit icon */}
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/>
-                    </svg>
-                </button>
+                <div className="text-center z-10">
+                    <h1 className="text-5xl font-black tracking-tight">{vocab.word}</h1>
+                    {vocab.partOfSpeech && (
+                        <p className="text-indigo-200 text-sm font-bold uppercase tracking-[0.2em] mt-2 opacity-80">
+                            {vocab.partOfSpeech}
+                        </p>
+                    )}
+                </div>
+            </div>
 
-                <button aria-label="icon-3" style={styles.iconButton}>
-                    {/* Trash icon */}
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-                        <path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="currentColor"/>
-                    </svg>
-                </button>
+            {/* Content */}
+            <div className="px-6 py-10 -mt-10 bg-white rounded-t-[40px] relative z-20">
+                <section className="mb-10">
+                    <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Definition</h2>
+                    <p className="text-2xl font-semibold text-slate-800 leading-tight">
+                        {vocab.definition}
+                    </p>
+                </section>
 
-                <button aria-label="icon-4" style={styles.iconButton}>
-                    {/* Share icon */}
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-                        <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a3.2 3.2 0 0 0 0-1.4l7.02-4.11A2.99 2.99 0 1 0 15 5a2.99 2.99 0 0 0 .96 2.24L8.94 11.3a3 3 0 1 0 0 1.4l7.02 4.11A2.99 2.99 0 1 0 18 16.08z" fill="currentColor"/>
-                    </svg>
-                </button>
-            </footer>
+                <section className="mb-10">
+                    <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Example Usage</h2>
+                    <div className="p-6 bg-slate-50 border border-slate-100 rounded-3xl italic text-slate-700 text-lg leading-relaxed relative">
+                        <span className="absolute -top-4 -left-1 text-4xl text-indigo-200">“</span>
+                        {vocab.example}
+                        <span className="absolute -bottom-8 -right-1 text-4xl text-indigo-200">”</span>
+                    </div>
+                </section>
+
+                {vocab.notes && (
+                    <section className="mb-10">
+                        <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Notes & Synonyms</h2>
+                        <p className="text-slate-600 bg-amber-50 p-4 rounded-2xl border border-amber-100 italic">
+                            {vocab.notes}
+                        </p>
+                    </section>
+                )}
+
+                <div className="pt-10 border-t border-slate-100">
+                    <button
+                        onClick={() => {
+                            if (confirm("Permanently delete this word?")) onDelete(vocab.id);
+                        }}
+                        className="w-full py-4 text-red-500 font-bold border-2 border-red-50 rounded-2xl hover:bg-red-50 transition-all flex items-center justify-center space-x-2"
+                    >
+                        <span>🗑️</span>
+                        <span>Delete from Library</span>
+                    </button>
+                </div>
+            </div>
         </div>
     );
-}
-
-const styles = {
-    page: {
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        background: "#f5f7fb",
-        color: "#111827",
-        fontFamily: "Inter, Roboto, system-ui, -apple-system, 'Segoe UI', sans-serif",
-    },
-    centerArea: {
-        flex: 1,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "24px",
-    },
-    card: {
-        textAlign: "center",
-        maxWidth: 800,
-        width: "100%",
-        padding: "48px 32px",
-        borderRadius: 12,
-        background: "white",
-        boxShadow: "0 6px 18px rgba(16,24,40,0.08)",
-    },
-    title: {
-        margin: 0,
-        fontSize: "2rem",
-        fontWeight: 700,
-        lineHeight: 1.1,
-    },
-    description: {
-        marginTop: "12px",
-        color: "#6b7280",
-        fontSize: "1rem",
-    },
-    footer: {
-        position: "fixed",
-        left: 0,
-        right: 0,
-        bottom: 20,
-        display: "flex",
-        justifyContent: "center",
-        gap: 16,
-        pointerEvents: "auto",
-    },
-    iconButton: {
-        background: "white",
-        border: "none",
-        padding: 12,
-        borderRadius: 999,
-        boxShadow: "0 4px 10px rgba(16,24,40,0.08)",
-        cursor: "pointer",
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        color: "#374151",
-    },
 };
-
-export default ShowVocabulary;
