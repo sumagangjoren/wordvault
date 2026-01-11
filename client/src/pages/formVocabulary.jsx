@@ -1,11 +1,36 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useVocabularyContext } from "../context/vocabularyContext";
+import { useEffect } from "react";
 
 export default function FormVocabulary({ handleSubmit }) {
 
     const { vocabularies, vocabulary, setVocabulary, loading, errorMessage, } = useVocabularyContext();
     const { vocabulary_id } = useParams();
     const editing = vocabularies?.find(v => v.id == vocabulary_id);
+
+    useEffect(() => {
+        if (editing) {
+            setVocabulary({
+                id: editing.id,
+                word: editing.word || "",
+                definition: editing.definition || "",
+                partOfSpeech: editing.partOfSpeech || "",
+                example: editing.example || ""
+            });
+        }
+
+        // 🧹 cleanup runs when user leaves the page
+        return () => {
+            setVocabulary({
+                word: "",
+                definition: "",
+                partOfSpeech: "",
+                example: ""
+            });
+        };
+
+    }, [editing, setVocabulary]);
+
     const navigate = useNavigate();
 
     const handleFormSubmit = async (e) => {
@@ -28,13 +53,13 @@ export default function FormVocabulary({ handleSubmit }) {
                     <h1 className="text-3xl font-black text-slate-900">{editing ? 'Edit Word' : 'New Word'}</h1>
                     <p className="text-slate-500">Capture and cultivate your language.</p>
                 </div>
-                <button onClick={() => navigate(-1)} className="text-slate-400 font-bold hover:text-slate-600">
+                <button onClick={() => navigate(-1)} className="text-slate-400 cursor-pointer font-bold hover:text-slate-600">
                     ❌
                 </button>
             </header>
             {errorMessage && (
                 <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg border border-red-200">
-                    {errorMessage}
+                    {errorMessage} 
                 </div>
             )}
             <form
@@ -90,7 +115,7 @@ export default function FormVocabulary({ handleSubmit }) {
                 <div className="pt-6">
                     <button
                         type="submit"
-                        className="w-full bg-slate-900 text-white font-black py-5 rounded-2xl shadow-xl hover:bg-slate-800 transition-all active:scale-95 text-lg"
+                        className="w-full bg-slate-900 cursor-pointer text-white font-black py-5 rounded-2xl shadow-xl hover:bg-slate-800 transition-all active:scale-95 text-lg"
                     >
                         {editing ? 'Save Changes' : 'Add to Collection'}
                     </button>

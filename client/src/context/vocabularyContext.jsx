@@ -12,7 +12,7 @@ export const VocabularyContextProvider = ({ children }) => {
     const [vocabularies, setVocabularies] = useState([]);
     const [errorMessage, setErrorMessage] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [vocabulary, setVocabulary] = useState({ word: "", definition: "", partOfSpeech: "", example: "", partOfSpeech: "" });
+    const [vocabulary, setVocabulary] = useState({ word: "", definition: "", partOfSpeech: "", example: "", id: null });
 
     const fetchVocabularies = async () => {
          if (!session) {
@@ -22,7 +22,9 @@ export const VocabularyContextProvider = ({ children }) => {
 
         const { data, error } = await supabase
             .from('vocabularies')
-            .select('*');
+            .select('*')
+            .eq('user_id', session.user.id);
+
         if (!error) {
             setVocabularies(data);
         }
@@ -34,7 +36,17 @@ export const VocabularyContextProvider = ({ children }) => {
         fetchVocabularies();
     }, [session?.user?.id]);
 
-    const deleteVocabulary = (id) => {
+    const deleteVocabulary = async (id) => {
+        const { error } = await supabase
+        .from('vocabularies')
+        .delete()
+        .eq('id', id)
+        
+        if (error) {
+            console.error("Supabase error:", error);
+            return;
+        }
+
         setVocabularies(prev => prev.filter(v => v.id !== id));
     };
 
@@ -62,7 +74,7 @@ export const VocabularyContextProvider = ({ children }) => {
         try {
             setLoading(true);
 
-            const { error } = await supabase
+            const { error, data } = await supabase
                 .from("vocabularies")
                 .insert([
                     {
@@ -72,7 +84,9 @@ export const VocabularyContextProvider = ({ children }) => {
                         example: vocabulary.example.trim(),
                         user_id: session.user.id
                     }
-                ]);
+                ])
+                .select()
+                .single();
 
             if (error) {
                 console.error("Supabase error:", error);
@@ -80,10 +94,8 @@ export const VocabularyContextProvider = ({ children }) => {
                 return;
             }
 
-             // ✅ optimistic update
-            setVocabularies(prev => [vocabulary, ...prev]);
-            // ✅ reset form safely
-            setVocabulary({ word: "", definition: "", partOfSpeech: "", example: "", partOfSpeech: "" });
+            setVocabularies(prev => [data, ...prev]);
+            setVocabulary({ word: "", definition: "", partOfSpeech: "", example: ""});
         } catch (err) {
             console.error("Unexpected error:", err);
             setErrorMessage("Something went wrong. Please try again.");
@@ -94,12 +106,53 @@ export const VocabularyContextProvider = ({ children }) => {
 
     const updateVocabulary = async (e) => {
         e.preventDefault();
-        console.log("updating vocabulary...");
+        setErrorMessage(null);
+
+        if (!vocabulary.word.trim() || !vocabulary.definition.trim()) {
+            setErrorMessage("Word and definition are required.");
+            return;
+        }
+
+        console.log(vocabulary)
+        try {
+            const { data, error } = await supabase
+            .from('vocabularies')
+            .update({
+                word: vocabulary.word.trim(),
+                definition: vocabulary.definition.trim(),
+                partOfSpeech: vocabulary.partOfSpeech,
+                example: vocabulary.example.trim(),
+            })
+            .eq('id', vocabulary.id)
+            .select()
+            .single()
+
+            if (error) {
+                setErrorMessage(error.message);
+                return;
+            }
+
+            console.log(data)
+            setVocabularies(prev => [data, ...prev]);
+            setVocabulary({ word: "", definition: "", partOfSpeech: "", example: ""});
+        } catch (err) {
+            console.error(err);
+            setErrorMessage("Failed to update vocabulary.");
+        } finally {
+            setLoading(false);
+        }
     }
+
+    const resetVocabularyState = () => {
+        setVocabularies([]);
+        setVocabulary({ word: "", definition: "", partOfSpeech: "", example: "" });
+        setErrorMessage(null);
+        setLoading(false);
+    };
 
 
     return (
-        <VocabularyContext.Provider value={{ vocabularies, fetchVocabularies, updateVocabulary, setVocabularies, deleteVocabulary, createVocabulary, loading, errorMessage, setErrorMessage, vocabulary, setVocabulary }}>
+        <VocabularyContext.Provider value={{ vocabularies, resetVocabularyState, fetchVocabularies, updateVocabulary, setVocabularies, deleteVocabulary, createVocabulary, loading, errorMessage, setErrorMessage, vocabulary, setVocabulary }}>
             {children}
         </VocabularyContext.Provider>
     )

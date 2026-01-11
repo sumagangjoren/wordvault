@@ -31,10 +31,13 @@ function Login() {
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
 			<div className="bg-white rounded-lg shadow-md p-8 w-full max-w-md">
-                <div className="mb-6 text-center">
-                    <h2 className="text-2xl font-bold text-gray-900">Welcome back</h2>
-                    <p className="text-sm text-gray-600 mt-1">Sign in to access your WordVault</p>
-                </div>
+               <div className="mb-10 text-center">
+					<div className="inline-block p-3 bg-indigo-600 rounded-2xl mb-4">
+						<span className="text-3xl">🚀</span>
+					</div>
+					<h1 className="text-3xl font-extrabold text-slate-900">WordVault</h1>
+					<p className="text-slate-500">Master new words, one swipe at a time.</p>
+					</div>
 
                 <form onSubmit={handleLogin} className="space-y-4" aria-label="Login form">
 
@@ -43,29 +46,25 @@ function Login() {
                     }
 
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                            Email
-                        </label>
+                        <label className="block text-sm font-semibold text-slate-700 mb-1">Email</label>
                         <input
                             id="email"
                             name="email"
                             type="email"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                             placeholder="you@example.com"
                             value={email}
                             onChange={(e) => setEmail((prev) => e.target.value)}
                         />
                     </div>
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                            Password
-                        </label>
+                        <label className="block text-sm font-semibold text-slate-700 mb-1">Password</label>
                         <div className="relative">
                             <input
                                 id="password"
                                 name="password"
                                 type={showPassword ? "text" : "password"}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                                 placeholder="Enter your password"
                                 onChange={(e) => setPassword((prev) => e.target.value)}
                             />
@@ -92,13 +91,11 @@ function Login() {
 						type="submit"
 						disabled={loading}
 						className={`
-							w-full font-semibold py-2 rounded-lg transition duration-200
-							flex items-center justify-center gap-2
+							w-full bg-slate-900 text-white font-bold py-4 rounded-xl shadow-xl shadow-slate-200 hover:bg-slate-800 transition-all active:scale-95
 							${loading
 								? "bg-blue-400 cursor-not-allowed"
 								: "bg-blue-500 hover:bg-blue-600"
 							}
-							text-white
 						`}
 					>
 						{loading && (

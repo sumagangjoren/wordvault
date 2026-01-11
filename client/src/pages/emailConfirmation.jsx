@@ -1,26 +1,27 @@
+
+
 export default function EmailConfirmation() {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8 text-center">
-                <div>
-                    <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-                        Confirm your email
-                    </h2>
-                    <p className="mt-2 text-sm text-gray-600">
-                        We've sent a confirmation link to your email address.
-                    </p>
-                </div>
-
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <p className="text-gray-700">
-                        Please check your email and click the confirmation link to complete your registration.
-                    </p>
-                </div>
-
-                <div className="text-sm text-gray-600">
-                    <p>Didn't receive an email? Check your spam folder.</p>
-                </div>
+        <div className="flex flex-col items-center justify-center min-h-screen p-6 text-center bg-white">
+            <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
+                <span className="text-4xl">✉️</span>
             </div>
+            <h1 className="text-2xl font-bold text-slate-900 mb-2">Check your email</h1>
+            <p className="text-slate-500 mb-8 max-w-xs">
+                We've sent a verification link to <span className="font-semibold">{email}</span>.
+            </p>
+            <button
+                // onClick={() => setStep(AuthStep.LOGIN)}
+                className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-xl shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all mb-4"
+            >
+                I've verified my account
+            </button>
+            <button
+                onClick={() => alert("Verification email resent!")}
+                className="text-indigo-600 font-medium hover:underline"
+            >
+                Resend verification email
+            </button>
         </div>
     );
 }

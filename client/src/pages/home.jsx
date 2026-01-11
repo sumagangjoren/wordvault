@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import { useAuthContext } from '../context/authContext';
+import { useState } from 'react';
 import { useVocabularyContext } from '../context/vocabularyContext';
 import { useNavigate } from 'react-router';
+import ConfirmModal from '../components/confirmModal';
 // import supabase from '../supabaseClient';
 
 function Home() {
-    const { vocabularies } = useVocabularyContext();
+    const { vocabularies, deleteVocabulary } = useVocabularyContext();
     const navigate = useNavigate();
-
+    const [vocabToDelete, setVocabToDelete] = useState(null);
     // const getVocabularies = async () => {
     //     const { data, error } = await supabase
     //         .from('vocabularies')
@@ -32,7 +32,7 @@ function Home() {
                 <h2 className="text-xl font-bold text-slate-800 mb-2">Feed is empty</h2>
                 <p className="text-slate-500 mb-6">Add some new words to start your learning journey.</p>
                 <button
-                    onClick={() => navigate('/create')}
+                    onClick={() => navigate('/vocabularies/create')}
                     className="bg-indigo-600 text-white px-8 py-3 rounded-full font-bold shadow-lg shadow-indigo-100"
                 >
                     Add First Word
@@ -55,7 +55,7 @@ function Home() {
                     <div className="relative h-full flex flex-col items-center justify-center p-8 z-10 text-white">
                         <div
                             className="text-center cursor-pointer group"
-                            onClick={() => navigate(`/details/${vocab.id}`)}
+                            onClick={() => navigate(`/vocabularies/${vocab.id}`)}
                         >
                             <h2 className="text-5xl md:text-7xl font-black mb-6 tracking-tight group-hover:scale-105 transition-transform duration-300">
                                 {vocab.word}
@@ -74,29 +74,29 @@ function Home() {
                                 // onClick={() => onToggleFavorite(vocab.id)}
                                 className={`flex flex-col items-center space-y-1 group`}
                             >
-                                <div className={`p-2.5 rounded-full backdrop-blur-md border border-white/10 transition-all ${vocab.isFavorite ? 'bg-red-500/80 text-white' : 'bg-white/10 text-white group-hover:bg-white/20'}`}>
+                                <div className={`p-2.5 cursor-pointer rounded-full backdrop-blur-md border border-white/10 transition-all ${vocab.isFavorite ? 'bg-red-500/80 text-white' : 'bg-white/10 text-white group-hover:bg-white/20'}`}>
                                     <span className="text-lg">{vocab.isFavorite ? '❤️' : '🤍'}</span>
                                 </div>
                                 <span className="text-[9px] font-bold opacity-70">Like</span>
                             </button>
 
                             <button
-                                // onClick={() => navigate(`/edit/${vocab.id}`)}
+                                onClick={() => navigate(`/vocabularies/${vocab.id}/edit`)}
                                 className="flex flex-col items-center space-y-1 group"
                             >
-                                <div className="p-2.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white group-hover:bg-white/20 transition-all">
+                                <div className="p-2.5 cursor-pointer rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white group-hover:bg-white/20 transition-all">
                                     <span className="text-lg">✏️</span>
                                 </div>
                                 <span className="text-[9px] font-bold opacity-70">Edit</span>
                             </button>
 
                             <button
-                                // onClick={() => {
-                                //   if (confirm("Delete this word?")) onDelete(vocab.id);
-                                // }}
+                                onClick={() => {
+                                    setVocabToDelete(vocab);
+                                }}
                                 className="flex flex-col items-center space-y-1 group"
                             >
-                                <div className="p-2.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white group-hover:bg-red-500/40 transition-all">
+                                <div className="p-2.5 cursor-pointer rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white group-hover:bg-red-500/40 transition-all">
                                     <span className="text-lg">🗑️</span>
                                 </div>
                                 <span className="text-[9px] font-bold opacity-70">Delete</span>
@@ -113,8 +113,23 @@ function Home() {
                             </div>
                         </div>
                     </div>
+                    
                 </div>
+                
             ))}
+
+            <ConfirmModal 
+                isOpen={!!vocabToDelete}
+                confirmText="Yes, Delete"
+                title="Delete word?"
+                message={`Are you sure you want to remove "${vocabToDelete?.word}" from your collection?`}
+                onConfirm={() => {
+                    if (vocabToDelete) deleteVocabulary(vocabToDelete.id);
+                    setVocabToDelete(null);
+                }}
+                onCancel={() => setVocabToDelete(null)}
+            />
+
         </div>
     );
 }

@@ -1,16 +1,17 @@
 
 import { useNavigate, useParams } from "react-router-dom";
 import { useVocabularyContext } from "../context/vocabularyContext";
+import ConfirmModal from "../components/confirmModal";
+import { useState } from "react";
 
 export default function ShowVocabulary() {
 
-    const { vocabularies } = useVocabularyContext();
+    const { vocabularies, deleteVocabulary } = useVocabularyContext();
     const { vocabulary_id } = useParams();
+    const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
-    console.log(vocabularies)
     const vocab = vocabularies.find(v => v.id == vocabulary_id);
-    console.log(vocabulary_id)
-    console.log(vocab)
+
     if (!vocab) {
         return <div className="p-10 text-center">Word not found.</div>;
     }
@@ -31,13 +32,13 @@ export default function ShowVocabulary() {
                 <div className="absolute top-4 right-4 flex space-x-2">
                     <button
                         onClick={() => onToggleFavorite(vocab.id)}
-                        className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-all"
+                        className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-all cursor-pointer"
                     >
                         <span className="text-xl">{vocab.isFavorite ? '❤️' : '🤍'}</span>
                     </button>
                     <button
                         onClick={() => navigate(`/vocabularies/${vocab.id}/edit`)}
-                        className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-all"
+                        className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-all cursor-pointer"
                     >
                         <span className="text-xl">✏️</span>
                     </button>
@@ -89,15 +90,28 @@ export default function ShowVocabulary() {
                 <div className="pt-10 border-t border-slate-100">
                     <button
                         onClick={() => {
-                            if (confirm("Permanently delete this word?")) onDelete(vocab.id);
+                            setShowModal(true)
                         }}
-                        className="w-full py-4 text-red-500 font-bold border-2 border-red-50 rounded-2xl hover:bg-red-50 transition-all flex items-center justify-center space-x-2"
+                        className="w-full cursor-pointer py-4 text-red-500 font-bold border-2 border-red-50 rounded-2xl hover:bg-red-50 transition-all flex items-center justify-center space-x-2"
                     >
                         <span>🗑️</span>
                         <span>Delete from Library</span>
                     </button>
                 </div>
             </div>
+
+            <ConfirmModal
+                isOpen={showModal}
+                title="Delete word?"
+                message={`Are you sure you want to remove "${vocab.word}" from your collection?`}
+                confirmText="Yes, Delete"
+                onConfirm={() => {
+                    deleteVocabulary(vocab.id);
+                    setShowModal(false);
+                    navigate('/vocabularies')
+                }}
+                onCancel={() => setShowModal(false)}
+            />
         </div>
     );
 };

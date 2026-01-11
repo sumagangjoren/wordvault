@@ -26,7 +26,7 @@ export default function QuizSetup({ vocabCount }) {
       <div className="w-full max-w-md space-y-4 mb-10">
         <button
           onClick={() => setType(quizType.WORD_TO_DEFINITION)}
-          className={`w-full p-6 rounded-3xl border-2 transition-all text-left flex items-center justify-between ${
+          className={`w-full p-6 rounded-3xl border-2 cursor-pointer transition-all text-left flex items-center justify-between ${
             type === quizType.WORD_TO_DEFINITION ? 'border-indigo-600 bg-indigo-50' : 'border-slate-100 bg-white'
           }`}
         >
@@ -39,7 +39,7 @@ export default function QuizSetup({ vocabCount }) {
 
         <button
           onClick={() => setType(quizType.DEFINITION_TO_WORD)}
-          className={`w-full p-6 rounded-3xl border-2 transition-all text-left flex items-center justify-between ${
+          className={`w-full p-6 rounded-3xl border-2 cursor-pointer transition-all text-left flex items-center justify-between ${
             type === quizType.DEFINITION_TO_WORD ? 'border-indigo-600 bg-indigo-50' : 'border-slate-100 bg-white'
           }`}
         >
@@ -55,7 +55,7 @@ export default function QuizSetup({ vocabCount }) {
         <button
           onClick={handleStart}
           disabled={vocabCount < 4}
-          className="w-full bg-indigo-600 text-white font-black py-5 rounded-2xl shadow-xl shadow-indigo-100 disabled:opacity-50 transition-all active:scale-95"
+          className="w-full bg-indigo-600 text-white font-black cursor-pointer py-5 rounded-2xl shadow-xl shadow-indigo-100 disabled:opacity-50 transition-all active:scale-95"
         >
           {vocabCount < 4 ? `Need ${4 - vocabCount} more words` : 'Start Quiz'}
         </button>

@@ -96,7 +96,7 @@ export const AuthContextProvider = ({ children }) => {
         console.log(email, password)
         console.log(email, password)
         setLoading(true);
-        const { error } = await supabase.auth.signInWithPassword({
+        const { error, data } = await supabase.auth.signInWithPassword({
             email,
             password,
             options: {
@@ -109,11 +109,14 @@ export const AuthContextProvider = ({ children }) => {
             // alert(error.error_description || error.message);
             console.log("im here 2")
             console.error(error)
+            console.log(data)
+
             setErrorMessage(error.message)
             return { success: false, error: error };
         }
         else {
-            console.log("hi")
+            console.log(data)
+
             return { success: true };
         }
     };

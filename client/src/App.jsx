@@ -18,7 +18,9 @@ import EmailConfirmation from "./pages/emailConfirmation"
 import QuizSetup from "./pages/quizSetup"
 import QuizGame from "./pages/quizGame"
 import FormVocabulary from "./pages/formVocabulary"
+import Profile from "./pages/profile"
 import { useVocabularyContext } from "./context/vocabularyContext"
+import NotFound from "./pages/notFound404"
 
 function App() {
 
@@ -38,15 +40,17 @@ function App() {
                     <Route path="quiz/play" element={<QuizGame />} />
                     <Route path="quiz/setup" element={<QuizSetup />} />
                     <Route path="result" element={<Result />} />
+                    <Route path="profile" element={<Profile />} />
+                    {/* <Route path="*" element={<NotFound />} /> */}
                 </Route> 
             </Route>
             <Route element={<PublicRoute />}>
-                <Route element={<AuthLayout />}>
                     <Route path="login" element={<Login />} />
                     <Route path="signup" element={<SignUp />} />
                     <Route path="email-confirmation" element={<EmailConfirmation />} />
-                </Route>
+                    
             </Route>
+            <Route path="*" element={<NotFound />} />
         </>
     );
 

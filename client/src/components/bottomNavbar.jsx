@@ -11,6 +11,7 @@ export default function BottomNav() {
         { path: '/quiz/setup', label: 'Quiz', icon: '🧠' },
         { path: '/vocabularies', label: 'Vocabs', icon: '📚' },
         { path: '/vocabularies/create', label: 'Add', icon: '➕' },
+        { path: '/profile', label: 'Profile', icon: '👤' },
     ];
 
     return (
