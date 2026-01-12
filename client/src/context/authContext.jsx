@@ -93,8 +93,6 @@ export const AuthContextProvider = ({ children }) => {
 
 
     const signIn = async ({email, password}) => {
-        console.log(email, password)
-        console.log(email, password)
         setLoading(true);
         const { error, data } = await supabase.auth.signInWithPassword({
             email,
@@ -104,13 +102,8 @@ export const AuthContextProvider = ({ children }) => {
             }
         });
         setLoading(false);
-        console.log("im here")
         if (error) {
             // alert(error.error_description || error.message);
-            console.log("im here 2")
-            console.error(error)
-            console.log(data)
-
             setErrorMessage(error.message)
             return { success: false, error: error };
         }
@@ -122,7 +115,6 @@ export const AuthContextProvider = ({ children }) => {
     };
 
     const signUp = async ({name, email, password}) => {
-        console.log(email, password)
         setLoading(true);
         const { error, data } = await supabase.auth.signUp({
             email, 
@@ -135,6 +127,7 @@ export const AuthContextProvider = ({ children }) => {
         if(error) {
             console.error(error)
             console.log(data)
+            console.log('hi')
             setErrorMessage(error.message)
             return { success: false, error };
         }

@@ -14,7 +14,7 @@ import Quiz from "./pages/quiz"
 import Result from "./pages/result"
 import PrivateRoute from "./components/privateRoute"
 import PublicRoute from "./components/publicRoute"
-import EmailConfirmation from "./pages/emailConfirmation"
+// import EmailConfirmation from "./pages/emailConfirmation"
 import QuizSetup from "./pages/quizSetup"
 import QuizGame from "./pages/quizGame"
 import FormVocabulary from "./pages/formVocabulary"
@@ -47,7 +47,7 @@ function App() {
             <Route element={<PublicRoute />}>
                     <Route path="login" element={<Login />} />
                     <Route path="signup" element={<SignUp />} />
-                    <Route path="email-confirmation" element={<EmailConfirmation />} />
+                    {/* <Route path="email-confirmation" element={<EmailConfirmation />} /> */}
                     
             </Route>
             <Route path="*" element={<NotFound />} />

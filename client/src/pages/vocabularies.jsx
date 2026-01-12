@@ -10,18 +10,7 @@ export default function Vocabularies() {
     const { vocabularies, setVocabularies, loading } = useVocabularyContext();
     const [search, setSearch] = useState('');
     // const [vocabularies, setVocabularies] = useState([]);
-    const getVocabularies = async () => {
-        const { data, error } = await supabase
-            .from('vocabularies')
-            .select('*');
-        setVocabularies(data);
-        // console.log(data)
-    }
-
-    useEffect(() => {
-        getVocabularies();
-    }, []);
-
+    
     const navigate = useNavigate()
 
     const filtered = vocabularies.filter(v =>

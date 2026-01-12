@@ -132,8 +132,7 @@ export const VocabularyContextProvider = ({ children }) => {
                 return;
             }
 
-            console.log(data)
-            setVocabularies(prev => [data, ...prev]);
+            setVocabularies(prev => prev.filter(v => v.id !== vocabulary.id));
             setVocabulary({ word: "", definition: "", partOfSpeech: "", example: ""});
         } catch (err) {
             console.error(err);

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 
 export default function SignUp() {
 
-	const { signUp, loading } = useAuthContext();
+	const { signUp, loading, errorMessage } = useAuthContext();
 	const navigate = useNavigate();
 	const [showPassword, setShowPassword] = useState(false);
 	const [formData, setFormData] = useState({
@@ -25,13 +25,13 @@ export default function SignUp() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const { success} = await signUp({ email: formData.email, password: formData.password });
-			console.log(result)
+			const { success } = await signUp({ email: formData.email, password: formData.password });
+
 			if (success) {
 				navigate("/");
 			}
 			else {
-				console.error(result.error)
+				console.error(error)
 			}
 		}
 		catch (error) {
@@ -66,6 +66,9 @@ export default function SignUp() {
 							placeholder="Enter your name"
 						/>
 					</div> */}
+					{
+                        errorMessage && <div className="p-4 border border-red-600">{errorMessage}</div>
+                    }
 
 					<div>
 						<label className="block text-sm font-semibold text-slate-700 mb-1">Email</label>

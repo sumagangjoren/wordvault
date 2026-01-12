@@ -14,12 +14,14 @@ function Login() {
     const handleLogin = async (event) => {
         event.preventDefault();
         try {
-            const result = await signIn({ email, password });
+            const { success, error } = await signIn({ email, password });
             console.log(result)
-            if(result.success) {
+            if(success) {
                 navigate("/");
-                console.log("gogo")
             } else {
+                // if(error.code === 'email_not_confirmed') {
+                //     navigate("/email-confirmation");
+                // }
                 console.log("Something went wrong...")
             }
         }
