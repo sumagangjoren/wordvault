@@ -75,8 +75,6 @@ function VocabularyCard(props) {
                 </div>
             </Dialog>
         </div>
-
-        
     )
 };
 

@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useVocabularyContext } from "../context/vocabularyContext";
+import { useQuizContext } from "../context/quizContext";
 
 export default function QuizGame() {
 
+    const location = useLocation();
+    const navigate = useNavigate();
+    const { createQuizResult } = useQuizContext();
+    const { state } = location;
+    console.log(state.type)
     const QuizType = { WORD_TO_DEFINITION: 'WORD_TO_DEFINITION' }
     const type = {
         WORD_TO_DEFINITION: 'WORD_TO_DEFINITION'
@@ -16,9 +22,31 @@ export default function QuizGame() {
     const [selectedOption, setSelectedOption] = useState(null);
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        // Generate 10 questions or as many as we have
+    //     const shuffled = [...vocabularies].sort(() => 0.5 - Math.random()).slice(0, 10);
+    //     const generated = shuffled.map(v => {
+    //         const distractors = vocabularies
+    //             .filter(x => x.id !== v.id)
+    //             .sort(() => 0.5 - Math.random())
+    //             .slice(0, 3);
+
+    //         const options = type === QuizType.WORD_TO_DEFINITION
+    //             ? [v.definition, ...distractors.map(d => d.definition)]
+    //             : [v.word, ...distractors.map(d => d.word)];
+
+    //         return {
+    //             id: crypto.randomUUID(),
+    //             question: type === QuizType.WORD_TO_DEFINITION ? v.word : v.definition,
+    //             correctAnswer: type === QuizType.WORD_TO_DEFINITION ? v.definition : v.word,
+    //             options: options.sort(() => 0.5 - Math.random()),
+    //             wordId: v.id
+    //         };
+    //     });
+    //     setQuestions(generated);
+    // }, [vocabularies, type]);
+
+    useEffect(() => {
         const shuffled = [...vocabularies].sort(() => 0.5 - Math.random()).slice(0, 10);
         const generated = shuffled.map(v => {
             const distractors = vocabularies
@@ -38,8 +66,57 @@ export default function QuizGame() {
                 wordId: v.id
             };
         });
+
+        console.log(generated)
+        console.log('hello')
         setQuestions(generated);
-    }, [vocabularies, type]);
+    }, [vocabularies, state]);
+
+    const handleAnswer = (option) => {
+        if (selectedOption) return;
+        setSelectedOption(option);
+
+        const q = questions[currentIndex];
+        const isCorrect = option === q.correctAnswer;
+
+        const newAnswer = {
+            question: q.question,
+            userAnswer: option,
+            correctAnswer: q.correctAnswer,
+            isCorrect,
+            word: vocabularies.find(v => v.id === q.wordId)?.word || ''
+        };
+
+        setAnswers([...answers, newAnswer]);
+
+        setTimeout(async () => {
+            if (currentIndex < questions.length - 1) {
+                setCurrentIndex(currentIndex + 1);
+                setSelectedOption(null);
+            } else {
+                const finalScore = answers.length + (isCorrect ? 1 : 0);
+                const result = {
+                    score: finalScore,
+                    total: questions.length,
+                    answers: [...answers, newAnswer],
+                    type: state.type
+                };
+
+                const quizResult = await createQuizResult(result);
+
+                if (!quizResult) {
+                    console.error("Failed to create quiz result");
+                    return;
+                }
+
+                navigate(`/quiz/result/${quizResult.id}`, {
+                    state: { result }
+                });
+            }
+        }, 800);
+    };
+
+    const onComplete = null;
 
     if (questions.length === 0) return <div className="p-10 text-center">Preparing Quiz...</div>;
 

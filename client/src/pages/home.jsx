@@ -2,28 +2,12 @@ import { useState } from 'react';
 import { useVocabularyContext } from '../context/vocabularyContext';
 import { useNavigate } from 'react-router';
 import ConfirmModal from '../components/confirmModal';
-// import supabase from '../supabaseClient';
 
 function Home() {
-    const { vocabularies, deleteVocabulary } = useVocabularyContext();
+    const { vocabularies, deleteVocabulary, toggleFavorite } = useVocabularyContext();
     const navigate = useNavigate();
     const [vocabToDelete, setVocabToDelete] = useState(null);
-    // const getVocabularies = async () => {
-    //     const { data, error } = await supabase
-    //         .from('vocabularies')
-    //         .select('*');
-    //     setVocabularies(data);
-    // }
 
-    //  useEffect(() => {
-    //     getVocabularies();
-    // }, []);
-    // const vocabularies = [
-    //     { id: 1, word: 'Serendipity', definition: 'The occurrence of events by chance in a happy or beneficial way', isFavorite: true },
-    //     { id: 2, word: 'Ephemeral', definition: 'Lasting for a very short time', isFavorite: false },
-    //     { id: 3, word: 'Eloquent', definition: 'Fluent or persuasive in speaking or writing', isFavorite: true },
-    //     { id: 4, word: 'Procrastinate', definition: 'To delay or postpone something', isFavorite: false },
-    // ];
 
     if (vocabularies.length === 0) {
         return (
@@ -71,7 +55,7 @@ function Home() {
                         {/* Action Overlay - Moved to bottom right and made smaller */}
                         <div className="absolute right-6 bottom-10 flex flex-col space-y-4 items-center">
                             <button
-                                // onClick={() => onToggleFavorite(vocab.id)}
+                                onClick={() => toggleFavorite(vocab.id)}
                                 className={`flex flex-col items-center space-y-1 group`}
                             >
                                 <div className={`p-2.5 cursor-pointer rounded-full backdrop-blur-md border border-white/10 transition-all ${vocab.isFavorite ? 'bg-red-500/80 text-white' : 'bg-white/10 text-white group-hover:bg-white/20'}`}>

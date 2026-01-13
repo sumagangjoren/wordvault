@@ -1,28 +1,42 @@
 import { useAuthContext } from "../context/authContext";
 import { useVocabularyContext } from "../context/vocabularyContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { useQuizContext } from "../context/quizContext";
 
 export default function Profile() {
 
     const { session, signOut } = useAuthContext();
+    const { fetchQuizResults, quizResults } = useQuizContext();
     const { vocabularies, resetVocabularyState } = useVocabularyContext();
     const [isEditing, setIsEditing] = useState(false);
     const [tempName, setTempName] = useState(session?.user?.name || 'temporary name');
     const navigate = useNavigate();
     const favorites = vocabularies.filter(v => v.isFavorite);
-    const [history, setHistory] = useState([
-        // Dummy data for quiz history
-        { id: 1, type: 'WORD_TO_DEFINITION', score: 8, total: 10, date: '2024-06-01' },
-        { id: 2, type: 'DEFINITION_TO_WORD', score: 6, total: 10, date: '2024-05-28' },
-        { id: 3, type: 'WORD_TO_DEFINITION', score: 9, total: 10, date: '2024-05-20' },
-    ]);
+    const FAVORITES_LIMIT = 4;
+    const HISTORY_LIMIT = 4;
+    const [showAllFavs, setShowAllFavs] = useState(false);
+    const [showAllHistory, setShowAllHistory] = useState(false);
 
+    console.log(favorites)
     const handleLogout = () => {
         signOut();
         resetVocabularyState();
         navigate('/login');
     }
+
+    useEffect(() => {
+
+        fetchQuizResults();
+
+    }, []);
+
+     const averageScore = quizResults.length > 0 
+        ? Math.round((quizResults.reduce((acc, curr) => acc + (curr.score / curr.total), 0) / quizResults.length) * 100)
+        : 0;
+
+    const displayedFavs = showAllFavs ? favorites : favorites.slice(0, FAVORITES_LIMIT);
+    const displayedHistory = showAllHistory ? quizResults : quizResults.slice(0, HISTORY_LIMIT);
 
     return (
         <div className="min-h-screen bg-slate-50 pb-10">
@@ -70,8 +84,7 @@ export default function Profile() {
                         </div>
                         <div className="bg-slate-50 p-4 rounded-2xl text-center">
                             <span className="block text-2xl font-black text-slate-900">
-                                {/* {averageScore}% */}
-                                1
+                                {averageScore}%
                             </span>
                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Avg</span>
                         </div>
@@ -89,21 +102,29 @@ export default function Profile() {
                     </div>
 
                     {favorites.length > 0 ? (
-                        <div className="flex space-x-3 overflow-x-auto no-scrollbar pb-2">
-                            {favorites.map(v => (
-                                <div
-                                    key={v.id}
-                                    onClick={() => navigate(`/vocabularies/${v.id}`)}
-                                    className="flex-shrink-0 w-32 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm cursor-pointer hover:border-indigo-500 transition-all"
-                                >
-                                    <span className="block font-black text-slate-800 text-sm truncate">{v.word}</span>
-                                    <span className="text-[10px] text-slate-400 uppercase font-bold">{v.partOfSpeech || 'Vocab'}</span>
-                                </div>
-                            ))}
+                        <div className="grid grid-cols-2 gap-3">
+                        {displayedFavs.map(v => (
+                            <div 
+                            key={v.id}
+                            onClick={() => navigate(`/details/${v.id}`)}
+                            className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm cursor-pointer hover:border-indigo-500 hover:shadow-md transition-all group"
+                            >
+                            <span className="block font-black text-slate-800 text-sm truncate group-hover:text-indigo-600">{v.word}</span>
+                            <span className="text-[10px] text-slate-400 uppercase font-bold">{v.partOfSpeech || 'Vocab'}</span>
+                            </div>
+                        ))}
+                        {favorites.length > FAVORITES_LIMIT && (
+                            <button 
+                            onClick={() => setShowAllFavs(!showAllFavs)}
+                            className="col-span-2 py-3 text-slate-500 font-bold text-xs uppercase tracking-widest hover:text-indigo-600 transition-colors bg-white border border-slate-200 rounded-2xl mt-1"
+                            >
+                            {showAllFavs ? 'Show Less' : `See More (${favorites.length - FAVORITES_LIMIT} more)`}
+                            </button>
+                        )}
                         </div>
                     ) : (
                         <div className="bg-white p-8 rounded-3xl border border-dashed border-slate-200 text-center">
-                            <p className="text-slate-400 text-sm">No favorite words yet.</p>
+                        <p className="text-slate-400 text-sm">No favorite words yet.</p>
                         </div>
                     )}
                 </section>
@@ -112,9 +133,9 @@ export default function Profile() {
                 <section>
                     <h2 className="text-xl font-black text-slate-900 mb-4">Quiz History</h2>
                     <div className="space-y-3">
-                        {history.length > 0 ? (
-                            history.map((item) => (
-                                <div key={item.id} className="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between shadow-sm">
+                        {/* {quizResults.length > 0 ? (
+                            quizResults.map((item) => (
+                                <div key={item.id} onClick={() => navigate(`/quiz/result/${item.id}`)} className="bg-white cursor-pointer p-4 rounded-2xl border border-slate-200 flex items-center justify-between shadow-sm">
                                     <div className="flex items-center space-x-4">
                                         <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-black ${(item.score / item.total) >= 0.8 ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'
                                             }`}>
@@ -136,7 +157,45 @@ export default function Profile() {
                             <div className="bg-white p-8 rounded-3xl border border-dashed border-slate-200 text-center">
                                 <p className="text-slate-400 text-sm">Take your first quiz to see history.</p>
                             </div>
-                        )}
+                        )} */}
+
+                        {quizResults.length > 0 ? (
+                            <>
+                                {displayedHistory.map((item) => (
+                                <div key={item.id} className="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                    <div className="flex items-center space-x-4">
+                                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-black ${
+                                        (item.score / item.total) >= 0.8 ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'
+                                    }`}>
+                                        {Math.round((item.score / item.total) * 100)}%
+                                    </div>
+                                    <div>
+                                        <span className="block font-bold text-slate-800 text-sm">
+                                        {item.type === "WORD_TO_DEFINITION" ? 'Word → Meaning' : 'Meaning → Word'}
+                                        </span>
+                                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                                        {new Date(item.date).toLocaleDateString()} • {item.score}/{item.total} pts
+                                        </span>
+                                    </div>
+                                    </div>
+                                    <span className="text-xl">🏆</span>
+                                </div>
+                                ))}
+                                
+                                {quizResults.length > HISTORY_LIMIT && (
+                                <button 
+                                    onClick={() => setShowAllHistory(!showAllHistory)}
+                                    className="w-full py-3 text-slate-500 font-bold text-xs uppercase tracking-widest hover:text-indigo-600 transition-colors bg-white border border-slate-200 rounded-2xl"
+                                >
+                                    {showAllHistory ? 'Show Less' : `Show More Quizzes (${quizResults.length - HISTORY_LIMIT} more)`}
+                                </button>
+                                )}
+                            </>
+                            ) : (
+                            <div className="bg-white p-8 rounded-3xl border border-dashed border-slate-200 text-center">
+                                <p className="text-slate-400 text-sm">Take your first quiz to see history.</p>
+                            </div>
+                            )}
                     </div>
                 </section>
 

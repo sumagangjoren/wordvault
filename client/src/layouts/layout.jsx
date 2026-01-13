@@ -1,5 +1,4 @@
 import { Outlet } from 'react-router'
-import Navbar from '../components/navbar'
 import BottomNav from '../components/bottomNavbar'
 
 function Layout() {

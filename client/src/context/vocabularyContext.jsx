@@ -142,6 +142,23 @@ export const VocabularyContextProvider = ({ children }) => {
         }
     }
 
+    const toggleFavorite = async (id) => {
+
+        const vocab = vocabularies.find(v => v.id === id);
+        if (!vocab) return;
+
+        const { error } = await supabase
+        .from('vocabularies')
+        .update({ isFavorite: !vocab.isFavorite })
+        .eq('id', id);
+
+        if (error) {
+            console.error("Supabase error:", error);
+            return;
+        }
+        setVocabularies(prev => prev.map(v => v.id === id ? { ...v, isFavorite: !v.isFavorite } : v));
+    }
+
     const resetVocabularyState = () => {
         setVocabularies([]);
         setVocabulary({ word: "", definition: "", partOfSpeech: "", example: "" });
@@ -151,7 +168,7 @@ export const VocabularyContextProvider = ({ children }) => {
 
 
     return (
-        <VocabularyContext.Provider value={{ vocabularies, resetVocabularyState, fetchVocabularies, updateVocabulary, setVocabularies, deleteVocabulary, createVocabulary, loading, errorMessage, setErrorMessage, vocabulary, setVocabulary }}>
+        <VocabularyContext.Provider value={{ vocabularies, toggleFavorite, resetVocabularyState, fetchVocabularies, updateVocabulary, setVocabularies, deleteVocabulary, createVocabulary, loading, errorMessage, setErrorMessage, vocabulary, setVocabulary }}>
             {children}
         </VocabularyContext.Provider>
     )

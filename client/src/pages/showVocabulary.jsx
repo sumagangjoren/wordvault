@@ -6,7 +6,7 @@ import { useState } from "react";
 
 export default function ShowVocabulary() {
 
-    const { vocabularies, deleteVocabulary } = useVocabularyContext();
+    const { vocabularies, deleteVocabulary, toggleFavorite } = useVocabularyContext();
     const { vocabulary_id } = useParams();
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
@@ -31,7 +31,7 @@ export default function ShowVocabulary() {
                 </div>
                 <div className="absolute top-4 right-4 flex space-x-2">
                     <button
-                        onClick={() => onToggleFavorite(vocab.id)}
+                        onClick={() => toggleFavorite(vocab.id)}
                         className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-all cursor-pointer"
                     >
                         <span className="text-xl">{vocab.isFavorite ? '❤️' : '🤍'}</span>
