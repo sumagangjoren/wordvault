@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import supabase from "../supabaseClient";
 import { useAuthContext } from "./authContext";
+import { useCollectionContext } from "./collectionContext";
 
 const VocabularyContext = createContext();
 
@@ -9,10 +10,11 @@ export const useVocabularyContext = () => useContext(VocabularyContext)
 export const VocabularyContextProvider = ({ children }) => {
 
     const { session } = useAuthContext();
+    const { collections, fetchCollections,  } = useCollectionContext();
     const [vocabularies, setVocabularies] = useState([]);
     const [errorMessage, setErrorMessage] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [vocabulary, setVocabulary] = useState({ word: "", definition: "", partOfSpeech: "", example: "", id: null });
+    const [vocabulary, setVocabulary] = useState({ word: "", definition: "", partOfSpeech: "", example: "", id: null, collection_id: null });
 
     const fetchVocabularies = async () => {
          if (!session) {
@@ -28,12 +30,14 @@ export const VocabularyContextProvider = ({ children }) => {
         if (!error) {
             setVocabularies(data);
         }
-        console.log('fetching vocabularies');
+        fetchCollections();
         console.log('Fetched vocabularies:', data);
     };
 
     useEffect(() => {
         fetchVocabularies();
+        // console.log(session.user.id)
+        
     }, [session?.user?.id]);
 
     const deleteVocabulary = async (id) => {
@@ -82,7 +86,8 @@ export const VocabularyContextProvider = ({ children }) => {
                         definition: vocabulary.definition.trim(),
                         partOfSpeech: vocabulary.partOfSpeech,
                         example: vocabulary.example.trim(),
-                        user_id: session.user.id
+                        user_id: session.user.id,
+                        collection_id: vocabulary.collection_id,
                     }
                 ])
                 .select()
@@ -95,7 +100,7 @@ export const VocabularyContextProvider = ({ children }) => {
             }
 
             setVocabularies(prev => [data, ...prev]);
-            setVocabulary({ word: "", definition: "", partOfSpeech: "", example: ""});
+            setVocabulary({ word: "", definition: "", partOfSpeech: "", example: "", collection_id: "", id: null });
         } catch (err) {
             console.error("Unexpected error:", err);
             setErrorMessage("Something went wrong. Please try again.");

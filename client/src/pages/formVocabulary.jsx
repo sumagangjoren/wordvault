@@ -1,12 +1,14 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useVocabularyContext } from "../context/vocabularyContext";
 import { useEffect } from "react";
+import { useCollectionContext } from "../context/collectionContext";
 
 export default function FormVocabulary({ handleSubmit }) {
 
-    const { vocabularies, vocabulary, setVocabulary, loading, errorMessage, } = useVocabularyContext();
+    const { vocabularies, vocabulary, setVocabulary, errorMessage, } = useVocabularyContext();
     const { vocabulary_id } = useParams();
     const editing = vocabularies?.find(v => v.id == vocabulary_id);
+    const { collections, fetchCollections } = useCollectionContext();
 
     useEffect(() => {
         if (editing) {
@@ -15,7 +17,8 @@ export default function FormVocabulary({ handleSubmit }) {
                 word: editing.word || "",
                 definition: editing.definition || "",
                 partOfSpeech: editing.partOfSpeech || "",
-                example: editing.example || ""
+                example: editing.example || "",
+                collection_id: editing.collection_id || ''
             });
         }
 
@@ -25,7 +28,8 @@ export default function FormVocabulary({ handleSubmit }) {
                 word: "",
                 definition: "",
                 partOfSpeech: "",
-                example: ""
+                example: "",
+                collection_id: ""
             });
         };
 
@@ -59,7 +63,7 @@ export default function FormVocabulary({ handleSubmit }) {
             </header>
             {errorMessage && (
                 <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg border border-red-200">
-                    {errorMessage} 
+                    {errorMessage}
                 </div>
             )}
             <form
@@ -87,6 +91,30 @@ export default function FormVocabulary({ handleSubmit }) {
                         </button> */}
                     </div>
                     <p className="text-xs text-slate-400">Type a word and wait a moment for AI suggestions!</p>
+                </div>
+
+                <div className="space-y-3">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest">Collection</label>
+                    <div className="flex overflow-x-auto no-scrollbar space-x-2 pb-1">
+                        <button
+                            type="button"
+                            onClick={() => setVocabulary({ ...vocabulary, collection_id: '' })}
+                            className={`flex-shrink-0 px-4 py-3 cursor-pointer rounded-xl border text-sm font-bold transition-all ${!vocabulary.collection_id ? 'bg-slate-900 border-slate-900 text-white' : 'bg-white border-slate-200 text-slate-500'}`}
+                        >
+                            None
+                        </button>
+                        {collections.map(col => (
+                            <button
+                                key={col.id}
+                                type="button"
+                                // onClick={() => setCollectionId(col.id)}
+                                onClick={(e) => setVocabulary({ ...vocabulary, collection_id: col.id })}
+                                className={`flex-shrink-0 cursor-pointer px-4 py-3 rounded-xl border text-sm font-bold transition-all ${vocabulary.collection_id === col.id ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white border-slate-200 text-slate-500'}`}
+                            >
+                                {col.emoji} {col.name}
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 <div className="space-y-2">
@@ -120,7 +148,7 @@ export default function FormVocabulary({ handleSubmit }) {
                         {editing ? 'Save Changes' : 'Add to Collection'}
                     </button>
                 </div>
-            
+
             </form>
         </div>
     );

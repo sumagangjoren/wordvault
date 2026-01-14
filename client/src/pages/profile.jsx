@@ -1,13 +1,13 @@
 import { useAuthContext } from "../context/authContext";
 import { useVocabularyContext } from "../context/vocabularyContext";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useQuizContext } from "../context/quizContext";
 
 export default function Profile() {
 
     const { session, signOut } = useAuthContext();
-    const { fetchQuizResults, quizResults } = useQuizContext();
+    const { quizResults } = useQuizContext();
     const { vocabularies, resetVocabularyState } = useVocabularyContext();
     const [isEditing, setIsEditing] = useState(false);
     const [tempName, setTempName] = useState(session?.user?.name || 'temporary name');
@@ -18,18 +18,11 @@ export default function Profile() {
     const [showAllFavs, setShowAllFavs] = useState(false);
     const [showAllHistory, setShowAllHistory] = useState(false);
 
-    console.log(favorites)
     const handleLogout = () => {
         signOut();
         resetVocabularyState();
         navigate('/login');
     }
-
-    useEffect(() => {
-
-        fetchQuizResults();
-
-    }, []);
 
      const averageScore = quizResults.length > 0 
         ? Math.round((quizResults.reduce((acc, curr) => acc + (curr.score / curr.total), 0) / quizResults.length) * 100)
@@ -98,7 +91,7 @@ export default function Profile() {
                 <section>
                     <div className="flex justify-between items-end mb-4">
                         <h2 className="text-xl font-black text-slate-900">Favorites</h2>
-                        <button onClick={() => navigate('/vocabularies')} className="text-indigo-600 text-xs font-bold cursor-pointer uppercase tracking-widest">View Library</button>
+                        <button onClick={() => navigate('/vocabularies')} className="text-indigo-600  text-xs font-bold cursor-pointer uppercase tracking-widest">View Library</button>
                     </div>
 
                     {favorites.length > 0 ? (
@@ -116,7 +109,7 @@ export default function Profile() {
                         {favorites.length > FAVORITES_LIMIT && (
                             <button 
                             onClick={() => setShowAllFavs(!showAllFavs)}
-                            className="col-span-2 py-3 text-slate-500 font-bold text-xs uppercase tracking-widest hover:text-indigo-600 transition-colors bg-white border border-slate-200 rounded-2xl mt-1"
+                            className="col-span-2 cursor-pointer py-3 text-slate-500 font-bold text-xs uppercase tracking-widest hover:text-indigo-600 transition-colors bg-white border border-slate-200 rounded-2xl mt-1"
                             >
                             {showAllFavs ? 'Show Less' : `See More (${favorites.length - FAVORITES_LIMIT} more)`}
                             </button>
@@ -162,7 +155,7 @@ export default function Profile() {
                         {quizResults.length > 0 ? (
                             <>
                                 {displayedHistory.map((item) => (
-                                <div key={item.id} className="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                <div key={item.id} onClick={() => navigate(`/quiz/result/${item.id}`)} className="bg-white cursor-pointer p-4 rounded-2xl border border-slate-200 flex items-center justify-between shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300">
                                     <div className="flex items-center space-x-4">
                                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-black ${
                                         (item.score / item.total) >= 0.8 ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'
@@ -185,7 +178,7 @@ export default function Profile() {
                                 {quizResults.length > HISTORY_LIMIT && (
                                 <button 
                                     onClick={() => setShowAllHistory(!showAllHistory)}
-                                    className="w-full py-3 text-slate-500 font-bold text-xs uppercase tracking-widest hover:text-indigo-600 transition-colors bg-white border border-slate-200 rounded-2xl"
+                                    className="w-full py-3 text-slate-500 font-bold text-xs uppercase cursor-pointer tracking-widest hover:text-indigo-600 transition-colors bg-white border border-slate-200 rounded-2xl"
                                 >
                                     {showAllHistory ? 'Show Less' : `Show More Quizzes (${quizResults.length - HISTORY_LIMIT} more)`}
                                 </button>

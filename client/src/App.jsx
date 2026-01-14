@@ -17,6 +17,8 @@ import Profile from "./pages/profile"
 import { useVocabularyContext } from "./context/vocabularyContext"
 import NotFound from "./pages/notFound404"
 import QuizResult from "./pages/quizResult"
+import Library from "./pages/library"
+import ShowCollection from "./pages/showCollection"
 
 function App() {
 
@@ -37,6 +39,8 @@ function App() {
                     <Route path="quiz/result/:quiz_result_id" element={<QuizResult />} />
                     <Route path="result" element={<Result />} />
                     <Route path="profile" element={<Profile />} />
+                    <Route path="library" element={<Library />} />
+                    <Route path="collections/:collection_id" element={<ShowCollection />} />
                     {/* <Route path="*" element={<NotFound />} /> */}
                 </Route> 
             </Route>

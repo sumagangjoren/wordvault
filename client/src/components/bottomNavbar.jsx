@@ -9,7 +9,7 @@ export default function BottomNav() {
     const items = [
         { path: '/', label: 'Home', icon: '🏠' },
         { path: '/quiz/setup', label: 'Quiz', icon: '🧠' },
-        { path: '/vocabularies', label: 'Vocabs', icon: '📚' },
+        { path: '/library', label: 'Library', icon: '📚' },
         { path: '/vocabularies/create', label: 'Add', icon: '➕' },
         { path: '/profile', label: 'Profile', icon: '👤' },
     ];
