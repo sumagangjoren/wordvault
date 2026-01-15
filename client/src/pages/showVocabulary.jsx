@@ -24,9 +24,9 @@ export default function ShowVocabulary() {
                 <div className="absolute top-4 left-4">
                     <button
                         onClick={() => navigate(-1)}
-                        className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-all"
+                        className="p-2 bg-white/20 rounded-full cursor-pointer hover:bg-white/30 transition-all"
                     >
-                        <span className="text-xl">←</span>
+                        <span className="text-xl">←</span> 
                     </button>
                 </div>
                 <div className="absolute top-4 right-4 flex space-x-2">
