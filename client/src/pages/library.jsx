@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useVocabularyContext } from "../context/vocabularyContext";
 import ConfirmModal from "../components/confirmModal";
@@ -25,6 +25,12 @@ export default function Library() {
         createCollection(e);
         setIsAddingCol(false);
     };
+
+    useEffect(() => {
+        fetchCollections();
+    }, []);
+
+    
 
     return (
         <div className="p-6">
@@ -83,9 +89,13 @@ export default function Library() {
                             </div>
                         ))}
                         {filteredWords.length === 0 && (
-                            <div className="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
-                                <p className="text-slate-400">No matching words found.</p>
-                            </div>
+                            <button
+                                onClick={() => navigate('/vocabularies/create')}
+                                className="h-40 cursor-pointer border-2 border-dashed border-slate-200 rounded-3xl flex flex-col items-center justify-center text-slate-400 hover:border-indigo-300 hover:text-indigo-400 transition-all bg-white/50"
+                            >
+                                <span className="text-3xl mb-2">➕</span>
+                                <span className="font-bold text-xs uppercase tracking-widest">Add First Word</span>
+                            </button>
                         )}
                     </div>
                 </>

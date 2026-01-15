@@ -17,7 +17,7 @@ function Home() {
                 <p className="text-slate-500 mb-6">Add some new words to start your learning journey.</p>
                 <button
                     onClick={() => navigate('/vocabularies/create')}
-                    className="bg-indigo-600 text-white px-8 py-3 rounded-full font-bold shadow-lg shadow-indigo-100"
+                    className="bg-indigo-600 text-white px-8 cursor-pointer py-3 rounded-full font-bold shadow-lg shadow-indigo-100"
                 >
                     Add First Word
                 </button>
