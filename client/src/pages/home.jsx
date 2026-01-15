@@ -44,9 +44,9 @@ function Home() {
                             <h2 className="text-5xl md:text-7xl font-black mb-6 tracking-tight group-hover:scale-105 transition-transform duration-300">
                                 {vocab.word}
                             </h2>
-                            <div className="inline-block px-4 py-1 bg-white/10 backdrop-blur-md rounded-full text-indigo-300 text-sm font-bold uppercase tracking-widest mb-8">
+                            {/* <div className="inline-block px-4 py-1 bg-white/10 backdrop-blur-md rounded-full text-indigo-300 text-sm font-bold uppercase tracking-widest mb-8">
                                 {vocab.partOfSpeech || 'Unknown Type'}
-                            </div>
+                            </div> */}
                             <p className="text-xl md:text-2xl font-light text-slate-300 max-w-md leading-relaxed">
                                 "{vocab.definition}"
                             </p>

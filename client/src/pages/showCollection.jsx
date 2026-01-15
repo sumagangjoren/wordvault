@@ -30,7 +30,7 @@ export default function ShowCollection() {
         )}
 
         <button 
-          onClick={() => navigate('/quiz/play', { state: { type: QuizType.WORD_TO_DEFINITION, collectionId: col.id } })}
+          onClick={() => navigate('/quiz/play', { state: { type: "WORD_TO_DEFINITION", collection_id: col.id } })}
           disabled={words.length < 4}
           className="w-full py-4 bg-indigo-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-100 disabled:opacity-50 active:scale-95 transition-all flex items-center justify-center space-x-2"
         >

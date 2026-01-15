@@ -1,16 +1,16 @@
 import { useAuthContext } from "../context/authContext";
 import { useVocabularyContext } from "../context/vocabularyContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useQuizContext } from "../context/quizContext";
 
 export default function Profile() {
 
     const { session, signOut } = useAuthContext();
-    const { quizResults } = useQuizContext();
+    const { quizResults, fetchQuizResults } = useQuizContext();
     const { vocabularies, resetVocabularyState } = useVocabularyContext();
     const [isEditing, setIsEditing] = useState(false);
-    const [tempName, setTempName] = useState(session?.user?.name || 'temporary name');
+    // const [tempName, setTempName] = useState(session?.user?.name || 'temporary name');
     const navigate = useNavigate();
     const favorites = vocabularies.filter(v => v.isFavorite);
     const FAVORITES_LIMIT = 4;
@@ -31,6 +31,10 @@ export default function Profile() {
     const displayedFavs = showAllFavs ? favorites : favorites.slice(0, FAVORITES_LIMIT);
     const displayedHistory = showAllHistory ? quizResults : quizResults.slice(0, HISTORY_LIMIT);
 
+    useEffect(() => {
+        fetchQuizResults();
+    }, [])
+
     return (
         <div className="min-h-screen bg-slate-50 pb-10">
             {/* Header Profile Section */}
@@ -44,13 +48,13 @@ export default function Profile() {
                         <div className="w-full flex space-x-2 mb-2">
                             <input
                                 type="text"
-                                value={tempName}
-                                onChange={(e) => setTempName(e.target.value)}
+                                // value={tempName}
+                                // onChange={(e) => setTempName(e.target.value)}
                                 className="flex-grow px-4 py-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500"
                                 autoFocus
                             />
                             <button
-                                onClick={handleSave}
+                                // onClick={handleSave}
                                 className="bg-indigo-600 text-white px-4 rounded-xl font-bold"
                             >
                                 Save
@@ -160,14 +164,18 @@ export default function Profile() {
                                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-black ${
                                         (item.score / item.total) >= 0.8 ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'
                                     }`}>
-                                        {Math.round((item.score / item.total) * 100)}%
-                                    </div>
+                                        {Math.round((item.score / item.total) * 100)}% 
+                                    </div> 
                                     <div>
                                         <span className="block font-bold text-slate-800 text-sm">
                                         {item.type === "WORD_TO_DEFINITION" ? 'Word → Meaning' : 'Meaning → Word'}
                                         </span>
                                         <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                                        {new Date(item.date).toLocaleDateString()} • {item.score}/{item.total} pts
+                                        {new Date(item.created_at).toLocaleDateString(undefined, {
+                                        month: "short",
+                                        day: "numeric",
+                                        year: "numeric",
+                                        })} • {item.score}/{item.total} pts
                                         </span>
                                     </div>
                                     </div>

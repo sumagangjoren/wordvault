@@ -8,7 +8,7 @@ export default function FormVocabulary({ handleSubmit }) {
     const { vocabularies, vocabulary, setVocabulary, errorMessage, } = useVocabularyContext();
     const { vocabulary_id } = useParams();
     const editing = vocabularies?.find(v => v.id == vocabulary_id);
-    const { collections, fetchCollections } = useCollectionContext();
+    const { collections } = useCollectionContext();
 
     useEffect(() => {
         if (editing) {
@@ -43,7 +43,7 @@ export default function FormVocabulary({ handleSubmit }) {
         try {
             handleSubmit(e);
             // navigate to home or details page
-            navigate('/vocabularies'); // or navigate(`/vocabularies/${result.data.id}`)
+            navigate(-1); // or navigate(`/vocabularies/${result.data.id}`)
         } catch (err) {
             //   setErrorMessage(err.message || 'Failed to create');
             console.error('Error submitting form:', err);

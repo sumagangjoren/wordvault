@@ -45,6 +45,20 @@ export const QuizContextProvider = ({ children }) => {
         }
     };
 
+    const deleteQuiz = async (id) => {
+        const { error } = await supabase
+        .from('quiz_results')
+        .delete()
+        .eq('id', id)
+        
+        if (error) {
+            console.error("Supabase error:", error);
+            return;
+        }
+
+        setQuizResults(prev => prev.filter(q => q.id !== id));
+    };
+
     // const getQuizResult = async (quit_result_id) => {
     //     const { data, error } = await supabase
     //     .from('quiz_results')
@@ -95,11 +109,17 @@ export const QuizContextProvider = ({ children }) => {
             return;
         }
 
+        setResult({
+            score: 0,
+            total: 0,
+            answers: []
+        });
+
         return quizResult;
     };
 
     return (
-        <QuizContext.Provider value={{ quizResults, setQuizResults, fetchQuizResults, createQuizResult, getQuizResult, result }}>
+        <QuizContext.Provider value={{ quizResults, setQuizResults, fetchQuizResults, createQuizResult, getQuizResult, result, deleteQuiz }}>
             { children }
         </QuizContext.Provider>
     )

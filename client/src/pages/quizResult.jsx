@@ -2,38 +2,21 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import supabase from "../supabaseClient";
 import { useQuizContext } from "../context/quizContext";
+import ConfirmModal from "../components/confirmModal";
 
 export default function QuizResult() {
 
     const { quiz_result_id } = useParams();
-    const { getQuizResult, result } = useQuizContext();
+    const { getQuizResult, result, deleteQuiz } = useQuizContext();
     const navigate = useNavigate();
 
     useEffect(() => {
         getQuizResult(quiz_result_id);
     }, []);
 
-    // const getQuizResult = async () => {
-    //     const { data, error } = await supabase
-    //     .from('quiz_results')
-    //     .select(`
-    //         *,
-    //         answers (*)
-    //     `)
-    //     .eq('id', quiz_result_id)
-    //     .single();
-
-    //     console.log(data)
-    //     if(!error) {
-    //         setResult(data);
-    //     }
-    //     else {
-    //         console.error("Error fetching quiz result:", error);
-    //     }
-    // }
-    
-
+    const [showModal, setShowModal] = useState(false);
     const percentage = Math.round((result.score / result.total) * 100);
+    console.log(result.score, result.total, percentage);
 
     return (
         <div className="p-6">
@@ -74,6 +57,30 @@ export default function QuizResult() {
                     Back Home
                 </button>
             </div>
+            <div className="pt-4 border-t border-slate-100">
+                    <button
+                        onClick={() => {
+                            setShowModal(true)
+                        }}
+                        className="w-full cursor-pointer py-4 text-red-500 font-bold border-2 border-red-50 rounded-2xl hover:bg-red-50 transition-all flex items-center justify-center space-x-2"
+                    >
+                        <span>🗑️</span>
+                        <span>Delete Quiz</span>
+                    </button>
+                </div>
+
+            <ConfirmModal
+                isOpen={showModal}
+                title="Delete quiz?"
+                message={`Are you sure you want to delete this quiz?`}
+                confirmText="Yes, Delete"
+                onConfirm={() => {
+                    deleteQuiz(quiz_result_id);
+                    setShowModal(false);
+                    navigate('/profile')
+                }}
+                onCancel={() => setShowModal(false)}
+            />
         </div>
     );
 }

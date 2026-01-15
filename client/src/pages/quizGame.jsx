@@ -8,7 +8,7 @@ export default function QuizGame() {
     const location = useLocation();
     const navigate = useNavigate();
     const { createQuizResult } = useQuizContext();
-    const { state } = location;
+    const { state, collection_id } = location;
     console.log(state.type)
     const QuizType = { WORD_TO_DEFINITION: 'WORD_TO_DEFINITION' }
     const type = {
@@ -21,33 +21,13 @@ export default function QuizGame() {
     const [answers, setAnswers] = useState([]);
     const [selectedOption, setSelectedOption] = useState(null);
 
-
-    // useEffect(() => {
-
-    //     const shuffled = [...vocabularies].sort(() => 0.5 - Math.random()).slice(0, 10);
-    //     const generated = shuffled.map(v => {
-    //         const distractors = vocabularies
-    //             .filter(x => x.id !== v.id)
-    //             .sort(() => 0.5 - Math.random())
-    //             .slice(0, 3);
-
-    //         const options = type === QuizType.WORD_TO_DEFINITION
-    //             ? [v.definition, ...distractors.map(d => d.definition)]
-    //             : [v.word, ...distractors.map(d => d.word)];
-
-    //         return {
-    //             id: crypto.randomUUID(),
-    //             question: type === QuizType.WORD_TO_DEFINITION ? v.word : v.definition,
-    //             correctAnswer: type === QuizType.WORD_TO_DEFINITION ? v.definition : v.word,
-    //             options: options.sort(() => 0.5 - Math.random()),
-    //             wordId: v.id
-    //         };
-    //     });
-    //     setQuestions(generated);
-    // }, [vocabularies, type]);
-
     useEffect(() => {
-        const shuffled = [...vocabularies].sort(() => 0.5 - Math.random()).slice(0, 10);
+            // Filter source words if a collection is selected
+    const sourceWords = state.collection_id ? vocabularies.filter(v => v.collection_id === state.collection_id) : vocabularies;
+
+    const shuffled = [...sourceWords].sort(() => 0.5 - Math.random()).slice(0, 10);
+
+        // const shuffled = [...vocabularies].sort(() => 0.5 - Math.random()).slice(0, 10);
         const generated = shuffled.map(v => {
             const distractors = vocabularies
                 .filter(x => x.id !== v.id)
@@ -94,7 +74,7 @@ export default function QuizGame() {
                 setCurrentIndex(currentIndex + 1);
                 setSelectedOption(null);
             } else {
-                const finalScore = answers.length + (isCorrect ? 1 : 0);
+                const finalScore = answers.filter(a => a.isCorrect).length;
                 const result = {
                     score: finalScore,
                     total: questions.length,
@@ -102,6 +82,8 @@ export default function QuizGame() {
                     type: state.type
                 };
 
+                console.log('Quiz completed:', result);
+                // console.log(result)
                 const quizResult = await createQuizResult(result);
 
                 if (!quizResult) {

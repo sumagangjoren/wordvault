@@ -9,16 +9,21 @@ export default function QuizSetup() {
     const { vocabularies } = useVocabularyContext();
     const { collections } = useCollectionContext();
     const [selectedCollectionId, setSelectedCollectionId] = useState('all');
-    const vocabCount = vocabularies.length;
+    // const vocabCount = vocabularies.length;
     const quizType = {
         WORD_TO_DEFINITION: 'WORD_TO_DEFINITION',
         DEFINITION_TO_WORD: 'DEFINITION_TO_WORD',
     };
+
+    const currentCount = selectedCollectionId == 'all' ? vocabularies.length : vocabularies.filter(v => v.collection_id == selectedCollectionId).length;
+
+
     const [type, setType] = useState(quizType.WORD_TO_DEFINITION);
     const navigate = useNavigate();
 
     const handleStart = () => {
-        navigate('/quiz/play', { state: { type, collection_id: selectedCollectionId } });
+        console.log('Starting quiz with type:', type, 'and collection ID:', selectedCollectionId);
+        navigate('/quiz/play', { state: { type, collection_id: selectedCollectionId == "all" ? undefined : selectedCollectionId} });
     };
 
     return (
@@ -88,10 +93,11 @@ export default function QuizSetup() {
             <div className="w-full max-w-md">
                 <button
                     onClick={handleStart}
-                    disabled={vocabCount < 4}
+                    disabled={currentCount < 4}
                     className="w-full bg-indigo-600 text-white font-black cursor-pointer py-5 rounded-2xl shadow-xl shadow-indigo-100 disabled:opacity-50 transition-all active:scale-95"
                 >
-                    {vocabCount < 4 ? `Need ${4 - vocabCount} more words` : 'Start Quiz'}
+                    {/* {vocabCount < 4 ? `Need ${4 - vocabCount} more words` : 'Start Quiz'} */}
+                    {currentCount < 4 ? `Add ${4 - currentCount} more words to start` : 'Start Challenge'}
                 </button>
                 <p className="text-center mt-4 text-xs text-slate-400">
                     We'll pick 10 random words from your library.

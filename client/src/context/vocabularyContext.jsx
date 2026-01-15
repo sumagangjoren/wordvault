@@ -10,7 +10,7 @@ export const useVocabularyContext = () => useContext(VocabularyContext)
 export const VocabularyContextProvider = ({ children }) => {
 
     const { session } = useAuthContext();
-    const { collections, fetchCollections,  } = useCollectionContext();
+    const { fetchCollections,  } = useCollectionContext();
     const [vocabularies, setVocabularies] = useState([]);
     const [errorMessage, setErrorMessage] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -87,7 +87,7 @@ export const VocabularyContextProvider = ({ children }) => {
                         partOfSpeech: vocabulary.partOfSpeech,
                         example: vocabulary.example.trim(),
                         user_id: session.user.id,
-                        collection_id: vocabulary.collection_id,
+                        collection_id: vocabulary.collection_id || null,
                     }
                 ])
                 .select()
@@ -127,6 +127,7 @@ export const VocabularyContextProvider = ({ children }) => {
                 definition: vocabulary.definition.trim(),
                 partOfSpeech: vocabulary.partOfSpeech,
                 example: vocabulary.example.trim(),
+                collection_id: vocabulary.collection_id || null,
             })
             .eq('id', vocabulary.id)
             .select()
@@ -137,8 +138,10 @@ export const VocabularyContextProvider = ({ children }) => {
                 return;
             }
 
-            setVocabularies(prev => prev.filter(v => v.id !== vocabulary.id));
-            setVocabulary({ word: "", definition: "", partOfSpeech: "", example: ""});
+              setVocabularies(prev =>
+                    prev.map(v => (v.id === data.id ? data : v))
+                );
+            setVocabulary({ word: "", definition: "", partOfSpeech: "", example: "", id: null, collection_id: null });
         } catch (err) {
             console.error(err);
             setErrorMessage("Failed to update vocabulary.");
