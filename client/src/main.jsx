@@ -9,13 +9,13 @@ import { CollectionContextProvider } from './context/collectionContext.jsx'
 
 createRoot(document.getElementById('root')).render(
     <AuthContextProvider>
-                <CollectionContextProvider>
-        <VocabularyContextProvider>
-            <QuizContextProvider>
+        <CollectionContextProvider>
+            <VocabularyContextProvider>
+                <QuizContextProvider>
                     <App />
-            </QuizContextProvider>
-        </VocabularyContextProvider>
-                </CollectionContextProvider>
+                </QuizContextProvider>
+            </VocabularyContextProvider>
+        </CollectionContextProvider>
 
     </AuthContextProvider>
 )

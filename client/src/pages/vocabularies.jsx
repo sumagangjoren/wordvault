@@ -10,7 +10,7 @@ export default function Vocabularies() {
     const { vocabularies, setVocabularies, loading } = useVocabularyContext();
     const [search, setSearch] = useState('');
     // const [vocabularies, setVocabularies] = useState([]);
-    
+
     const navigate = useNavigate()
 
     const filtered = vocabularies.filter(v =>
@@ -19,16 +19,16 @@ export default function Vocabularies() {
     );
 
     const ListCardSkeleton = () => (
-    <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-3">
-        <div className="flex justify-between items-center">
-        <div className="h-6 bg-slate-100 rounded-lg w-1/2 shimmer"></div>
-        <div className="w-4 h-4 bg-slate-100 rounded-full shimmer"></div>
+        <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-3">
+            <div className="flex justify-between items-center">
+                <div className="h-6 bg-slate-100 rounded-lg w-1/2 shimmer"></div>
+                <div className="w-4 h-4 bg-slate-100 rounded-full shimmer"></div>
+            </div>
+            <div className="space-y-2">
+                <div className="h-3 bg-slate-50 rounded-full w-full shimmer"></div>
+                <div className="h-3 bg-slate-50 rounded-full w-4/5 shimmer"></div>
+            </div>
         </div>
-        <div className="space-y-2">
-        <div className="h-3 bg-slate-50 rounded-full w-full shimmer"></div>
-        <div className="h-3 bg-slate-50 rounded-full w-4/5 shimmer"></div>
-        </div>
-    </div>
     );
 
     return (

@@ -41,31 +41,34 @@ export default function ShowCollection() {
 			</div>
 
 			<div className="p-6 space-y-4 pb-20">
-				{words.length > 0 ? (
-					words.map(v => (
-						<><div
-							key={v.id}
-							onClick={() => navigate(`/vocabularies/${v.id}`)}
-							className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-indigo-400 transition-all cursor-pointer flex justify-between items-center group"
-						>
-							<div>
-								<h3 className="font-bold text-slate-800">{v.word}</h3>
-								<p className="text-slate-400 text-xs line-clamp-1">{v.definition}</p>
+				{words.length > 0 ? 
+				(
+					<>
+						{words.map(v => (
+							<div
+								key={v.id}
+								onClick={() => navigate(`/vocabularies/${v.id}`)}
+								className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-indigo-400 transition-all cursor-pointer flex justify-between items-center group"
+							>
+								<div>
+									<h3 className="font-bold text-slate-800">{v.word}</h3>
+									<p className="text-slate-400 text-xs line-clamp-1">{v.definition}</p>
+								</div>
+								<span className="text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
 							</div>
-							<span className="text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-						</div><div className="text-center py-5 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
-								{/* <p className="text-slate-400 text-sm mb-4">This collection is empty.</p> */}
-								<button
-									onClick={() => navigate('/vocabularies/create')}
-									className="text-indigo-600 font-bold hover:underline"
-								>
-									<span className="mb-2">➕ Add new word</span>
-                                	{/* <span className="font-bold text-xs uppercase tracking-widest">Add First Word</span> */}
-								</button>
-							</div>
-						</>
-					))
-				) : (
+						))}
+						<div onClick={() => navigate('/vocabularies/create')} className="text-center cursor-pointer py-5 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 hover:border-indigo-300 hover:text-indigo-400">
+							{/* <p className="text-slate-400 text-sm mb-4">This collection is empty.</p> */}
+							<button
+								className="text-indigo-600 font-bold cursor-pointer"
+							>
+								<span className="mb-2">➕ Add new word</span>
+								{/* <span className="font-bold text-xs uppercase tracking-widest">Add First Word</span> */}
+							</button>
+						</div>
+					</>
+				)
+				: (
 					<div className="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
 						<p className="text-slate-400 text-sm mb-4">This collection is empty.</p>
 						<button
