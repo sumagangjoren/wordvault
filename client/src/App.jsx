@@ -19,6 +19,8 @@ import NotFound from "./pages/notFound404"
 import QuizResult from "./pages/quizResult"
 import Library from "./pages/library"
 import ShowCollection from "./pages/showCollection"
+import Notes from "./pages/notes"
+import FormNotes from "./pages/formNotes"
 
 function App() {
 
@@ -40,6 +42,8 @@ function App() {
                     <Route path="result" element={<Result />} />
                     <Route path="profile" element={<Profile />} />
                     <Route path="library" element={<Library />} />
+                    <Route path="notes" element={<Notes />} />
+                    <Route path="notes/create" element={<FormNotes />} />
                     <Route path="collections/:collection_id" element={<ShowCollection />} />
                     {/* <Route path="*" element={<NotFound />} /> */}
                 </Route> 

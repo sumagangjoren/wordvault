@@ -10,7 +10,8 @@ export default function BottomNav() {
         { path: '/', label: 'Home', icon: '🏠' },
         { path: '/quiz/setup', label: 'Quiz', icon: '🧠' },
         { path: '/library', label: 'Library', icon: '📚' },
-        { path: '/vocabularies/create', label: 'Add', icon: '➕' },
+        { path: '/notes', label: 'Notes', icon: '📒' },
+        // { path: '/vocabularies/create', label: 'Add', icon: '➕' },
         { path: '/profile', label: 'Profile', icon: '👤' },
     ];
 
