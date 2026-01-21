@@ -21,10 +21,13 @@ import Library from "./pages/library"
 import ShowCollection from "./pages/showCollection"
 import Notes from "./pages/notes"
 import FormNotes from "./pages/formNotes"
+import { useNoteContext } from "./context/noteContext"
+import ShowNotes from "./pages/showNotes"
 
 function App() {
 
     const { createVocabulary, updateVocabulary } = useVocabularyContext();
+    const { createNote, updateNote } = useNoteContext();
 
     const routes = createRoutesFromElements(
         <>
@@ -43,7 +46,9 @@ function App() {
                     <Route path="profile" element={<Profile />} />
                     <Route path="library" element={<Library />} />
                     <Route path="notes" element={<Notes />} />
-                    <Route path="notes/create" element={<FormNotes />} />
+                    <Route path="notes/:note_id" element={<ShowNotes />} />
+                    <Route path="notes/create" element={<FormNotes handleSubmit={createNote} />}  />
+                    <Route path="notes/:note_id/edit" element={<FormNotes handleSubmit={updateNote} />}  />
                     <Route path="collections/:collection_id" element={<ShowCollection />} />
                     {/* <Route path="*" element={<NotFound />} /> */}
                 </Route> 

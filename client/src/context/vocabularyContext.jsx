@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import supabase from "../supabaseClient";
 import { useAuthContext } from "./authContext";
 import { useCollectionContext } from "./collectionContext";
+import { useNoteContext } from "./noteContext";
 
 const VocabularyContext = createContext();
 
@@ -11,6 +12,7 @@ export const VocabularyContextProvider = ({ children }) => {
 
     const { session } = useAuthContext();
     const { fetchCollections,  } = useCollectionContext();
+    const { fetchNotes } = useNoteContext();
     const [vocabularies, setVocabularies] = useState([]);
     const [errorMessage, setErrorMessage] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -31,6 +33,7 @@ export const VocabularyContextProvider = ({ children }) => {
             setVocabularies(data);
         }
         fetchCollections();
+        fetchNotes();
         console.log('Fetched vocabularies:', data);
     };
 
@@ -69,11 +72,6 @@ export const VocabularyContextProvider = ({ children }) => {
             setErrorMessage("Definition is required.");
             return;
         }
-
-        // if (!vocabulary.type) {
-        //     setErrorMessage("Please select a word type.");
-        //     return;
-        // }
 
         try {
             setLoading(true);

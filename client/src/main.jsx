@@ -11,14 +11,13 @@ import { NoteContextProvider } from './context/noteContext.jsx'
 createRoot(document.getElementById('root')).render(
     <AuthContextProvider>
         <CollectionContextProvider>
+                    <NoteContextProvider>
             <VocabularyContextProvider>
                 <QuizContextProvider>
-                    <NoteContextProvider>
                         <App />
-                    </NoteContextProvider>
                 </QuizContextProvider>
             </VocabularyContextProvider>
+                    </NoteContextProvider>
         </CollectionContextProvider>
-
     </AuthContextProvider>
 )

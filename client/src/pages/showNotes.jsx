@@ -1,79 +1,84 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useNoteContext } from "../context/noteContext";
 
 const showNotes = () => {
 
-    
+    const { notes } = useNoteContext();
+    const { note_id } = useParams();
+    const [showModal, setShowModal] = useState(false);
+    const navigate = useNavigate();
+    const note = notes.find(n => n.id == note_id);
 
-  return (
-    <div className="p-6 min-h-screen bg-slate-50">
-      <header className="mb-8 flex justify-between items-end">
-        <div>
-          <h1 className="text-3xl font-black text-slate-900 mb-1">Learning Notes</h1>
-          <p className="text-slate-500 text-sm">Document your insights and deep dives.</p>
-        </div>
+    if (!note) {
+        return <div className="p-10 text-center">Note not found.</div>;
+    }
+
+    return (
+    <div className="min-h-screen bg-white pb-20">
+      <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex justify-between items-center">
         <button 
-          onClick={() => navigate('/notes/create')}
-          className="bg-indigo-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all active:scale-90"
+          onClick={() => navigate('/notes')} 
+          className="w-10 h-10 flex items-center justify-center rounded-xl text-slate-400 hover:bg-slate-50 transition-all"
         >
-          <span className="text-2xl">➕</span>
+          ←
         </button>
+        <div className="flex space-x-2">
+          <button 
+            onClick={() => navigate(`/notes/edit/${note.id}`)}
+            className="w-10 h-10 flex items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-all"
+          >
+            ✏️
+          </button>
+          <button 
+            // onClick={() => setShowDeleteModal(true)}
+            className="w-10 h-10 flex items-center justify-center rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-all"
+          >
+            🗑️
+          </button>
+        </div>
       </header>
 
-      <div className="relative mb-8">
-        <span className="absolute left-4 top-3.5 text-slate-400">🔍</span>
-        <input
-          type="text"
-          placeholder="Search your notes..."
-          className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all shadow-sm"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+      <article className="max-w-2xl mx-auto px-6 py-12">
+        <div className="mb-10">
+          {/* <div className="flex items-center space-x-2 text-[10px] font-black text-slate-300 uppercase tracking-widest mb-4">
+            <span>Last Edited</span>
+            <div className="w-1 h-1 bg-slate-200 rounded-full"></div>
+            <span>{new Date(note.updatedAt).toLocaleDateString()}</span>
+          </div> */}
+          <h1 className="text-5xl font-black text-slate-900 leading-tight">
+            {note.title}
+          </h1>
+        </div>
 
-      <div className="grid grid-cols-1 gap-4 pb-24">
-        {filteredNotes.length > 0 ? (
-          filteredNotes.map((note) => (
-            <div 
-              key={note.id}
-              onClick={() => navigate(`/notes/view/${note.id}`)}
-              className="bg-white p-6 rounded-[32px] border border-slate-200 hover:border-indigo-500 transition-all cursor-pointer group shadow-sm hover:shadow-md"
-            >
-              <div className="flex justify-between items-start mb-3">
-                <h3 className="text-xl font-black text-slate-800 leading-tight group-hover:text-indigo-600 transition-colors">
-                  {note.title}
-                </h3>
-                <button 
-                  onClick={(e) => { e.stopPropagation(); setDeletingId(note.id); }}
-                  className="opacity-0 group-hover:opacity-100 p-2 hover:bg-red-50 text-slate-300 hover:text-red-500 rounded-xl transition-all"
-                >
-                  🗑️
-                </button>
-              </div>
-              <p className="text-slate-500 text-sm line-clamp-3 leading-relaxed mb-4">
-                {note.content}
-              </p>
-              <div className="flex items-center text-[10px] font-bold text-slate-300 uppercase tracking-widest">
-                <span>Updated {new Date(note.updatedAt).toLocaleDateString()}</span>
-              </div>
-            </div>
-          ))
-        ) : (
-          <div className="text-center py-20 bg-white/50 rounded-3xl border-2 border-dashed border-slate-200">
-            <div className="text-4xl mb-4">📝</div>
-            <p className="text-slate-500 font-medium">No notes found.</p>
-            <button 
-              onClick={() => navigate('/notes/create')}
-              className="text-indigo-600 font-bold mt-2 hover:underline"
-            >
-              Create your first note
-            </button>
-          </div>
-        )}
-      </div>
-      </div>
-  )
+        <div className="prose prose-slate prose-lg max-w-none">
+          <div 
+            className="text-lg leading-relaxed rich-content"
+            dangerouslySetInnerHTML={{ __html: note.content }}
+          />
+        </div>
+      </article>
+
+      {/* <ConfirmModal
+        isOpen={showDeleteModal}
+        title="Permanently Delete?"
+        message="This note will be gone forever. Make sure you've backed up any important React secrets!"
+        onConfirm={() => {
+          onDelete(note.id);
+          navigate('/notes');
+        }}
+        onCancel={() => setShowDeleteModal(false)}
+      /> */}
+
+      <style>{`
+        .rich-content ul { list-style-type: disc !important; padding-left: 1.5rem !important; margin-bottom: 1rem; }
+        .rich-content ol { list-style-type: decimal !important; padding-left: 1.5rem !important; margin-bottom: 1rem; }
+        .rich-content blockquote { border-left: 4px solid #e2e8f0; padding-left: 1rem; font-style: italic; color: #64748b; margin: 1.5rem 0; }
+        .rich-content b, .rich-content strong { font-weight: 800; color: #1e293b; }
+        .rich-content a { color: #4f46e5; text-decoration: underline; }
+      `}</style>
+    </div>
+  );
 }
 
 export default showNotes

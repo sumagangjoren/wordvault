@@ -6,7 +6,7 @@ import { useState } from "react";
 export default function Notes() {
 
     const [search, setSearch] = useState('')
-    const { notes, note, setNote } = useNoteContext();
+    const { notes, setNote } = useNoteContext();
     const navigate = useNavigate();
 
     const filteredNotes = notes.filter(n => 
@@ -45,7 +45,7 @@ export default function Notes() {
                     filteredNotes.map((note) => (
                         <div
                             key={note.id}
-                            onClick={() => navigate(`/notes/view/${note.id}`)}
+                            onClick={() => navigate(`/notes/${note.id}`)}
                             className="bg-white p-6 rounded-[32px] border border-slate-200 hover:border-indigo-500 transition-all cursor-pointer group shadow-sm hover:shadow-md"
                         >
                             <div className="flex justify-between items-start mb-3">
@@ -81,13 +81,12 @@ export default function Notes() {
                 )}
             </div>
 
-            <ConfirmModal
+            {/* <ConfirmModal
                 isOpen={!!note}
                 title="Delete Note?"
                 message="This will permanently remove this learning note. This action cannot be undone."
-                // onConfirm={() => { if (deletingId) onDelete(deletingId); setDeletingId(null); }}
                 onCancel={() => setNote(null)}
-            />
+            /> */}
         </div>
     );
 }
