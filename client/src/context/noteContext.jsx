@@ -16,6 +16,7 @@ export const NoteContextProvider = ({ children }) => {
         const { data, error } = await supabase
             .from('notes')
             .select()
+            .eq('user_id', session.user.id)
 
         if (!error) {
             setNotes(data)
