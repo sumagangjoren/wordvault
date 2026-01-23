@@ -195,6 +195,9 @@ export default function FormNotes({ handleSubmit }) {
     const editor = useEditor({
         extensions: [TextStyleKit, StarterKit],
         content: editing?.content || '',
+        onUpdate: ({ editor }) => {
+            setNote({ ...note, content: editor.getHTML() });
+        },
         editorProps: {
         attributes: {
                 class: 'prose prose-slate max-w-none focus:outline-none min-h-[400px]',
@@ -208,8 +211,10 @@ export default function FormNotes({ handleSubmit }) {
         <div className="p-6 max-w-2xl mx-auto">
             <header className="mb-8 flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-black text-slate-900">{editing ? 'Edit Word' : 'New Word'}</h1>
-                    <p className="text-slate-500">Capture and cultivate your language.</p>
+                    <h1 className="text-3xl font-black text-slate-900">{editing ? 'Edit Note' : 'New Note'}</h1>
+                    <p className="text-slate-500">
+                        {editing ? 'Update your learning note below.' : 'Create a new learning note.'}
+                    </p>
                 </div>
                 <button onClick={() => navigate(-1)} className="text-slate-400 cursor-pointer font-bold hover:text-slate-600">
                     ❌

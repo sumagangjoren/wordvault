@@ -65,7 +65,7 @@ export default function Library() {
                             // disabled={isLoading}
                         />
                     </div>
-
+                
                     <div className="grid grid-cols-1 gap-4 pb-20">
                         {filteredWords.map((v) => (
                             <div
@@ -86,6 +86,7 @@ export default function Library() {
                                 >
                                     🗑️
                                 </button>
+                              
                             </div>
                         ))}
                         {filteredWords.length === 0 && (
@@ -97,6 +98,13 @@ export default function Library() {
                                 <span className="font-bold text-xs uppercase tracking-widest">Add First Word</span>
                             </button>
                         )}
+                          <button
+            onClick={() => navigate('/vocabularies/create')}
+            className="fixed bottom-24 right-6 w-16 h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-2xl shadow-indigo-300 hover:bg-indigo-700 hover:scale-110 active:scale-90 transition-all z-40"
+            aria-label="Add new word"
+          >
+            <span className="text-3xl font-light">＋</span>
+          </button>
                     </div>
                 </>
             ) : (

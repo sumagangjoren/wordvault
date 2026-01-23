@@ -2,6 +2,7 @@ import { useNoteContext } from "../context/noteContext"
 import ConfirmModal from "../components/confirmModal";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import './editor.css'
 
 export default function Notes() {
 
@@ -9,10 +10,19 @@ export default function Notes() {
     const { notes, setNote } = useNoteContext();
     const navigate = useNavigate();
 
-    const filteredNotes = notes.filter(n => 
-        n.title.toLowerCase().includes(search.toLowerCase()) || 
+    const filteredNotes = notes.filter(n =>
+        n.title.toLowerCase().includes(search.toLowerCase()) ||
         n.content.toLowerCase().includes(search.toLowerCase())
     );
+
+    const getPreviewText = (html, maxLength = 150) => {
+        const tmp = document.createElement("div");
+        tmp.innerHTML = html;
+        const text = tmp.textContent || tmp.innerText || "";
+        return text.length > maxLength
+            ? text.slice(0, maxLength) + "…"
+            : text;
+    };
 
     return (
         <div className="p-6 min-h-screen bg-slate-50">
@@ -21,12 +31,12 @@ export default function Notes() {
                     <h1 className="text-3xl font-black text-slate-900 mb-1">Learning Notes</h1>
                     <p className="text-slate-500 text-sm">Document your insights and deep dives.</p>
                 </div>
-                <button
+                {/* <button
                     onClick={() => navigate('/notes/create')}
                     className="bg-indigo-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all active:scale-90"
                 >
                     <span className="text-2xl">➕</span>
-                </button>
+                </button> */}
             </header>
 
             <div className="relative mb-8">
@@ -59,9 +69,13 @@ export default function Notes() {
                                     🗑️
                                 </button>
                             </div>
-                            <p className="text-slate-500 text-sm line-clamp-3 leading-relaxed mb-4">
-                                {note.content}
-                            </p>
+
+                            <div className="prose prose-slate prose-lg max-w-none">
+                                <div
+                                    className="prose prose-slate max-w-none line-clamp-3 overflow-hidden"
+                                    dangerouslySetInnerHTML={{ __html: note.content }}
+                                />
+                            </div>
                             <div className="flex items-center text-[10px] font-bold text-slate-300 uppercase tracking-widest">
                                 <span>Updated {new Date(note.updatedAt).toLocaleDateString()}</span>
                             </div>
@@ -79,6 +93,13 @@ export default function Notes() {
                         </button>
                     </div>
                 )}
+                  <button
+            onClick={() => navigate('/notes/create')}
+            className="fixed bottom-24 right-6 w-16 h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-2xl shadow-indigo-300 hover:bg-indigo-700 hover:scale-110 active:scale-90 transition-all z-40"
+            aria-label="Add new word"
+          >
+            <span className="text-3xl font-light">＋</span>
+          </button>
             </div>
 
             {/* <ConfirmModal

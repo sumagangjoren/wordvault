@@ -9,21 +9,25 @@ export const useNoteContext = () => useContext(NoteContext);
 export const NoteContextProvider = ({ children }) => {
 
     const { session } = useAuthContext()
-    const [notes, setNotes]= useState([]);
-    const [note, setNote] = useState({ title: '', content: '', id: null});
+    const [notes, setNotes] = useState([]);
+    const [note, setNote] = useState({ title: '', content: '', id: null });
 
     const fetchNotes = async () => {
         const { data, error } = await supabase
-        .from('notes')
-        .select()
+            .from('notes')
+            .select()
 
-        if(!error) {
+        if (!error) {
             setNotes(data)
         }
     }
 
     const createNote = async (e) => {
-        console.log('creating note...');
+
+
+
+        console.log('creating note...', e);
+        console.log(note);
         e.preventDefault();
         // setErrorMessage(null);
         // 🧪 Client-side validation
@@ -34,14 +38,12 @@ export const NoteContextProvider = ({ children }) => {
         }
 
         try {
-            // setLoading(true);
-
             const { error, data } = await supabase
                 .from("notes")
                 .insert([
                     {
                         title: note.title,
-                        content: note.definition,
+                        content: note.content,
                         user_id: session.user.id,
                     }
                 ])
@@ -50,7 +52,6 @@ export const NoteContextProvider = ({ children }) => {
 
             if (error) {
                 console.error("Supabase error:", error);
-                // setErrorMessage(error.message);
                 return;
             }
 
@@ -58,14 +59,13 @@ export const NoteContextProvider = ({ children }) => {
             setNote({ title: "", content: "", id: null });
         } catch (err) {
             console.error("Unexpected error:", err);
-            // setErrorMessage("Something went wrong. Please try again.");
         }
     }
 
     const updateNote = async (e) => {
         e.preventDefault();
         // setErrorMessage(null);
-
+        console.log('updating note...', note);
         if (!note.title.trim()) {
             // setErrorMessage("Title is required.");
             console.error("Title is required.")
@@ -74,14 +74,14 @@ export const NoteContextProvider = ({ children }) => {
 
         try {
             const { data, error } = await supabase
-            .from('notes')
-            .update({
-                title: note.title,
-                content: note.definition,
-            })
-            .eq('id', note.id)
-            .select()
-            .single()
+                .from('notes')
+                .update({
+                    title: note.title,
+                    content: note.content,
+                })
+                .eq('id', note.id)
+                .select()
+                .single()
 
             if (error) {
                 // setErrorMessage(error.message);
@@ -89,19 +89,36 @@ export const NoteContextProvider = ({ children }) => {
                 return;
             }
 
-              setNotes(prev =>
-                    prev.map(note => (note.id === data.id ? data : note))
-                );
-            setNotes({ title: "", content: "", id: null });
+            console.log(data)
+
+            setNotes(prev => prev.map(note => (note.id === data.id ? data : note)));
+            setNote({ title: "", content: "", id: null });
         } catch (err) {
             console.error(err);
             // setErrorMessage("Failed to update vocabulary.");
         }
     }
 
+    const deleteNote = async (id) => {
+
+        try {
+            const { error } = await supabase.from('notes').delete().eq('id', id);
+            if (error) {
+                console.error("Supabase error:", error);
+                return;
+            }
+
+            setNotes(prev => prev.filter(n => n.id !== id));
+        }
+        catch (err) {
+            console.error(err)
+        }
+
+    }
+
     return (
-        <NoteContext.Provider value={{notes, fetchNotes, note, setNote, createNote, updateNote}}>
-            { children }
+        <NoteContext.Provider value={{ notes, fetchNotes, note, setNote, createNote, updateNote, deleteNote }}>
+            {children}
         </NoteContext.Provider>
     )
 

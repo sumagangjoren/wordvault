@@ -73,6 +73,13 @@ export default function Vocabularies() {
                             </p>
                         </div>
                     ))}
+                    <button
+            onClick={() => navigate('/create')}
+            className="fixed bottom-24 right-6 w-16 h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-2xl shadow-indigo-300 hover:bg-indigo-700 hover:scale-110 active:scale-90 transition-all z-40"
+            aria-label="Add new word"
+          >
+            <span className="text-3xl font-light">＋</span>
+          </button>
                 </div>
             ) : (
                 <div className="text-center py-20 bg-slate-100 rounded-3xl border-2 border-dashed border-slate-200">

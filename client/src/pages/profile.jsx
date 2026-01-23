@@ -3,12 +3,14 @@ import { useVocabularyContext } from "../context/vocabularyContext";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useQuizContext } from "../context/quizContext";
+import { useNoteContext } from "../context/noteContext";
 
 export default function Profile() {
 
     const { session, signOut } = useAuthContext();
     const { quizResults, fetchQuizResults } = useQuizContext();
     const { vocabularies, resetVocabularyState } = useVocabularyContext();
+    const { notes } = useNoteContext();
     const [isEditing, setIsEditing] = useState(false);
     // const [tempName, setTempName] = useState(session?.user?.name || 'temporary name');
     const navigate = useNavigate();
@@ -68,7 +70,7 @@ export default function Profile() {
                     )}
                     <p className="text-slate-400 font-medium mb-8">{session?.user?.email}</p>
 
-                    <div className="grid grid-cols-3 gap-4 w-full">
+                    <div className="grid grid-cols-4 gap-4 w-full">
                         <div className="bg-slate-50 p-4 rounded-2xl text-center">
                             <span className="block text-2xl font-black text-slate-900">{vocabularies.length}</span>
                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Words</span>
@@ -78,6 +80,12 @@ export default function Profile() {
                                 {favorites.length}
                             </span>
                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Favs</span>
+                        </div>
+                        <div className="bg-slate-50 p-4 rounded-2xl text-center">
+                            <span className="block text-2xl font-black text-indigo-600">
+                                {notes.length}
+                            </span>
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Notes</span>
                         </div>
                         <div className="bg-slate-50 p-4 rounded-2xl text-center">
                             <span className="block text-2xl font-black text-slate-900">
@@ -95,7 +103,7 @@ export default function Profile() {
                 <section>
                     <div className="flex justify-between items-end mb-4">
                         <h2 className="text-xl font-black text-slate-900">Favorites</h2>
-                        <button onClick={() => navigate('/vocabularies')} className="text-indigo-600  text-xs font-bold cursor-pointer uppercase tracking-widest">View Library</button>
+                        <button onClick={() => navigate('/library')} className="text-indigo-600  text-xs font-bold cursor-pointer uppercase tracking-widest">View Library</button>
                     </div>
 
                     {favorites.length > 0 ? (
