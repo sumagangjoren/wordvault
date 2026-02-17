@@ -37,17 +37,11 @@ export default function NotFound() {
                         <span>Go Back</span>
                     </button>
 
-                    {/* <button
-                        onClick={() => navigate(-1)}
-                        className="w-full py-4 cursor-pointer bg-white text-slate-600 font-bold rounded-2xl border border-slate-200 hover:bg-slate-50 transition-all"
-                    >
-                        Go Back
-                    </button> */}
                 </div>
             </div>
 
             <div className="mt-12 text-[10px] font-bold text-slate-300 uppercase tracking-widest">
-                VocabFlow Error: Page_Not_Defined
+                WordVault Error: Page_Not_Defined
             </div>
         </div>
     );

@@ -6,8 +6,7 @@ export default function ConfirmModal({ isOpen, title, message, confirmText, onCo
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
             {/* Backdrop */}
-            <div
-                className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
+            <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
                 onClick={onCancel}
             />
 

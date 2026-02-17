@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
@@ -11,13 +10,13 @@ import { NoteContextProvider } from './context/noteContext.jsx'
 createRoot(document.getElementById('root')).render(
     <AuthContextProvider>
         <CollectionContextProvider>
-                    <NoteContextProvider>
-            <VocabularyContextProvider>
-                <QuizContextProvider>
+            <NoteContextProvider>
+                <VocabularyContextProvider>
+                    <QuizContextProvider>
                         <App />
-                </QuizContextProvider>
-            </VocabularyContextProvider>
-                    </NoteContextProvider>
+                    </QuizContextProvider>
+                </VocabularyContextProvider>
+            </NoteContextProvider>
         </CollectionContextProvider>
     </AuthContextProvider>
 )

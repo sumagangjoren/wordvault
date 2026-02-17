@@ -1,16 +1,11 @@
 import { useNavigate } from "react-router";
-import VocabularyCard from "../components/vocabularyCard";
-import { PlusIcon } from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
-import supabase from "../supabaseClient";
+import { useState } from "react";
 import { useVocabularyContext } from "../context/vocabularyContext";
 
 export default function Vocabularies() {
 
-    const { vocabularies, setVocabularies, loading } = useVocabularyContext();
+    const { vocabularies, loading } = useVocabularyContext();
     const [search, setSearch] = useState('');
-    // const [vocabularies, setVocabularies] = useState([]);
-
     const navigate = useNavigate()
 
     const filtered = vocabularies.filter(v =>
@@ -74,12 +69,12 @@ export default function Vocabularies() {
                         </div>
                     ))}
                     <button
-            onClick={() => navigate('/create')}
-            className="fixed bottom-24 right-6 w-16 h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-2xl shadow-indigo-300 hover:bg-indigo-700 hover:scale-110 active:scale-90 transition-all z-40"
-            aria-label="Add new word"
-          >
-            <span className="text-3xl font-light">＋</span>
-          </button>
+                        onClick={() => navigate('/create')}
+                        className="fixed bottom-24 right-6 w-16 h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-2xl shadow-indigo-300 hover:bg-indigo-700 hover:scale-110 active:scale-90 transition-all z-40"
+                        aria-label="Add new word"
+                    >
+                        <span className="text-3xl font-light">＋</span>
+                    </button>
                 </div>
             ) : (
                 <div className="text-center py-20 bg-slate-100 rounded-3xl border-2 border-dashed border-slate-200">
@@ -87,33 +82,6 @@ export default function Vocabularies() {
                     <p className="text-slate-500 font-medium">No words found.</p>
                 </div>
             )}
-
-            {/* {filtered.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {filtered.map((v, index) => (
-                        <div
-                            key={index}
-                            // onClick={() => navigate(`/details/${v.id}`)}
-                            className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-indigo-500 transition-all cursor-pointer group shadow-sm hover:shadow-md"
-                        >
-                            <div className="flex justify-between items-start mb-2">
-                                <h3 className="text-xl font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">
-                                    {v.word}
-                                </h3>
-                                {v.isFavorite && <span className="text-red-500">❤️</span>}
-                            </div>
-                            <p className="text-slate-500 line-clamp-2 text-sm leading-relaxed">
-                                {v.definition}
-                            </p>
-                        </div>
-                    ))}
-                </div>
-            ) : (
-                <div className="text-center py-20 bg-slate-100 rounded-3xl border-2 border-dashed border-slate-200">
-                    <span className="text-4xl block mb-4">😶</span>
-                    <p className="text-slate-500 font-medium">No words found.</p>
-                </div>
-            )} */}
         </div>
     );
 }

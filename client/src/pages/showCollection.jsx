@@ -5,7 +5,7 @@ import { useVocabularyContext } from "../context/vocabularyContext";
 export default function ShowCollection() {
 
 	const { collection_id } = useParams();
-	const { collections, fetchCollections } = useCollectionContext();
+	const { collections } = useCollectionContext();
 	const { vocabularies } = useVocabularyContext();
 	const navigate = useNavigate();
 

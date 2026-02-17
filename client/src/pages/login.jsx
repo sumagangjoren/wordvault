@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router";
 import { useState } from "react";
-import supabase from "../supabaseClient";
 import { useAuthContext } from "../context/authContext.jsx";
 
 function Login() {
@@ -19,9 +18,6 @@ function Login() {
             if(success) {
                 navigate("/");
             } else {
-                // if(error.code === 'email_not_confirmed') {
-                //     navigate("/email-confirmation");
-                // }
                 console.log("Something went wrong...")
             }
         }
