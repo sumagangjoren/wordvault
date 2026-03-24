@@ -103,7 +103,7 @@ export default function Profile() {
                 <section>
                     <div className="flex justify-between items-end mb-4">
                         <h2 className="text-xl font-black text-slate-900">Favorites</h2>
-                        <button onClick={() => navigate('/library')} className="text-indigo-600  text-xs font-bold cursor-pointer uppercase tracking-widest">View Library</button>
+                        {/* <button onClick={() => navigate('/library')} className="text-indigo-600  text-xs font-bold cursor-pointer uppercase tracking-widest">View Library</button> */}
                     </div>
 
                     {favorites.length > 0 ? (

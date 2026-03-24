@@ -40,7 +40,7 @@ function App() {
                     <Route path="quiz/setup" element={<QuizSetup />} />
                     <Route path="quiz/result/:quiz_result_id" element={<QuizResult />} />
                     <Route path="profile" element={<Profile />} />
-                    <Route path="library" element={<Library />} />
+                    <Route path="library" element={<Home />} />
                     <Route path="notes" element={<Notes />} />
                     <Route path="notes/:note_id" element={<ShowNotes />} />
                     <Route path="notes/create" element={<FormNotes handleSubmit={createNote} />}  />
